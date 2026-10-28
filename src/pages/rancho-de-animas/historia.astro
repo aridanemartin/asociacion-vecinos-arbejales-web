@@ -1,0 +1,19 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
+import CuerpoRico from '../../components/CuerpoRico.astro';
+import { getRancho } from '../../lib/content';
+const r = await getRancho();
+---
+<Base title="Historia del Rancho de Ánimas">
+  <PageHead title="Historia del Rancho de Ánimas" trail={[{ href: '/rancho-de-animas', label: 'Rancho de Ánimas' }]} />
+  <div class="container section">
+    <div class="prose historia">
+      {r?.cuerpo?.length ? (
+        <CuerpoRico bloques={r.cuerpo} />
+      ) : (
+        <p class="empty">Pronto publicaremos aquí la historia del Rancho de Ánimas.</p>
+      )}
+    </div>
+  </div>
+</Base>

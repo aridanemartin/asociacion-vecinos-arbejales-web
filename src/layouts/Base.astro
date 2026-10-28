@@ -1,0 +1,81 @@
+---
+import '../styles/global.css';
+import { site, nav, developer } from '../data/site';
+const { title, description = site.description } = Astro.props as { title?: string; description?: string };
+const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.place}`;
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const current = (href: string) => path === href || path.startsWith(href + '/');
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/png" href="/img/logo-simbolo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <script is:inline>document.documentElement.classList.add('js');</script>
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <header class="site-header">
+      <div class="container header-row">
+        <a class="brand" href="/">
+          <img src="/img/logo-simbolo.png" alt="" width="60" height="60" />
+          <span>
+            <span class="brand-name">{site.name}</span>
+            <span class="brand-place">{site.place}</span>
+          </span>
+        </a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu-principal">Menú</button>
+      </div>
+    </header>
+    <nav class="main-nav" id="menu-principal" aria-label="Secciones" data-open="false">
+      <div class="container">
+        <ul>
+          {nav.map((n) => (
+            <li><a href={n.href} aria-current={current(n.href) ? 'page' : undefined}>{n.short}</a></li>
+          ))}
+        </ul>
+      </div>
+    </nav>
+    <main id="contenido" tabindex="-1">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="container">
+        <div class="funders">
+          <p>Página financiada por:</p>
+          <img src="/img/cabildo-gran-canaria.jpg" alt="Cabildo de Gran Canaria" width="400" height="393" loading="lazy" />
+        </div>
+        <p class="footer-meta">© {new Date().getFullYear()} {site.name} · {site.place}</p>
+      </div>
+    </footer>
+    <p class="credit">
+      Página web desarrollada por{' '}
+      <a href={developer.url} target="_blank" rel="noopener noreferrer">{developer.name}<span class="sr-only"> (se abre en una pestaña nueva)</span></a>
+      {' '}· {developer.year}
+    </p>
+    <script is:inline>
+      (function () {
+        var btn = document.querySelector('.nav-toggle');
+        var menu = document.getElementById('menu-principal');
+        if (!btn || !menu) return;
+        var mq = window.matchMedia('(max-width: 62rem)');
+        function sync() { if (!mq.matches) { menu.dataset.open = 'true'; btn.setAttribute('aria-expanded', 'true'); } else { menu.dataset.open = 'false'; btn.setAttribute('aria-expanded', 'false'); } }
+        sync(); mq.addEventListener('change', sync);
+        btn.addEventListener('click', function () {
+          var open = btn.getAttribute('aria-expanded') === 'true';
+          btn.setAttribute('aria-expanded', String(!open));
+          menu.dataset.open = String(!open);
+        });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && mq.matches && btn.getAttribute('aria-expanded') === 'true') { btn.click(); btn.focus(); }
+        });
+      })();
+    </script>
+  </body>
+</html>

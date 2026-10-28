@@ -1,0 +1,53 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import CuerpoRico from '../components/CuerpoRico.astro';
+import Gallery from '../components/Gallery.astro';
+import { getFiestas, getFiestasAnios } from '../lib/content';
+const f = await getFiestas();
+const anios = (await getFiestasAnios()).filter((a) => a.fotos.length > 0);
+---
+<Base title="Nuestras fiestas" description="Cómo celebramos las fiestas de Arbejales, en Teror, y fotos de años anteriores.">
+  <PageHead title="Nuestras fiestas" intro="Las fiestas del barrio y las fotos de las ediciones anteriores." />
+  <div class="container section">
+    <div class="prose historia">
+      {f?.cuerpo?.length ? (
+        <CuerpoRico bloques={f.cuerpo} />
+      ) : (
+        <p class="empty">Pronto publicaremos aquí la descripción de nuestras fiestas.</p>
+      )}
+    </div>
+
+    <section class="fiestas-fotos" aria-labelledby="fotos-anios-titulo">
+      <h2 id="fotos-anios-titulo">Fotos de años anteriores</h2>
+      {anios.length === 0 ? (
+        <p class="empty">Pronto publicaremos aquí las fotos de las fiestas de otros años.</p>
+      ) : (
+        <>
+          <nav aria-label="Años con fotos">
+            <ul class="year-list">
+              {anios.map((a) => (
+                <li><a class="year-link" href={`#fiestas-${a.anio}`}>{a.anio}</a></li>
+              ))}
+            </ul>
+          </nav>
+          {anios.map((a) => (
+            <section class="year-block" aria-labelledby={`fiestas-${a.anio}`}>
+              <h3 id={`fiestas-${a.anio}`}>Fiestas de {a.anio}</h3>
+              <Gallery fotos={a.fotos} />
+            </section>
+          ))}
+        </>
+      )}
+    </section>
+  </div>
+</Base>
+
+<style>
+  .fiestas-fotos { margin-top: var(--space-12); }
+  .year-list { list-style: none; margin: var(--space-4) 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .year-link { display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--space-4); border-radius: 999px; border: 1.5px solid var(--color-primary); color: var(--color-primary); font-weight: 600; text-decoration: none; }
+  .year-link:hover { background: var(--color-primary); color: var(--color-on-accent); }
+  .year-block { margin-top: var(--space-8); scroll-margin-top: var(--space-6); }
+  .year-block h3 { margin-bottom: var(--space-4); scroll-margin-top: var(--space-6); }
+</style>

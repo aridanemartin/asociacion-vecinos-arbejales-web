@@ -1,0 +1,16 @@
+---
+const { title, intro, trail = [] } = Astro.props as { title: string; intro?: string; trail?: { href: string; label: string }[] };
+---
+<div class="page-head">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Migas de pan">
+      <ol>
+        <li><a href="/">Inicio</a></li>
+        {trail.map((t) => <li><a href={t.href}>{t.label}</a></li>)}
+        <li aria-current="page">{title}</li>
+      </ol>
+    </nav>
+    <h1>{title}</h1>
+    {intro && <p>{intro}</p>}
+  </div>
+</div>

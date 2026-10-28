@@ -1,0 +1,79 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import Icon from '../components/Icon.astro';
+import { getOcupacion } from '../lib/content';
+const ocupacion = await getOcupacion();
+const fmt = new Intl.DateTimeFormat('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+const hoy = new Date().toISOString().slice(0, 10);
+const proximas = ocupacion.filter((o) => o.fecha >= hoy).sort((a, b) => a.fecha.localeCompare(b.fecha));
+---
+<Base title="Disponibilidad del local" description="Calendario con los días en que el local de la asociación de vecinos está ocupado.">
+  <PageHead title="Disponibilidad del local" intro="Consulta los días en que el local de la asociación está ocupado." />
+  <div class="container section">
+    <div class="two-col">
+      <div>
+        <div class="card cal" id="cal" data-ocupacion={JSON.stringify(ocupacion)}>
+          <div class="cal-head">
+            <button class="icon-btn" type="button" id="cal-prev" aria-label="Mes anterior"><Icon name="prev" /></button>
+            <h2 id="cal-title" aria-live="polite"></h2>
+            <button class="icon-btn" type="button" id="cal-next" aria-label="Mes siguiente"><Icon name="next" /></button>
+          </div>
+          <table aria-labelledby="cal-title">
+            <thead><tr>{['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'].map((d) => <th scope="col">{d}</th>)}</tr></thead>
+            <tbody id="cal-body"></tbody>
+          </table>
+          <ul class="legend"><li><i></i>Libre</li><li><i class="busy"></i>Ocupado</li></ul>
+        </div>
+        <noscript><p class="notice">Activa JavaScript para ver el calendario. Debajo tienes la lista de próximos días ocupados.</p></noscript>
+      </div>
+      <div>
+        <h2>Próximos días ocupados</h2>
+        {proximas.length === 0 ? <p class="empty">No hay días ocupados registrados.</p> : (
+          <ul class="file-list">
+            {proximas.map((o) => (
+              <li class="card" style="padding:16px 24px"><strong>{fmt.format(new Date(o.fecha))}</strong>{o.motivo && <><br /><span style="color:var(--color-muted-foreground)">{o.motivo}</span></>}</li>
+            ))}
+          </ul>
+        )}
+        <p style="margin-top:24px">¿Quieres reservar el local? <a href="/sugerencias">Escríbenos</a>.</p>
+      </div>
+    </div>
+  </div>
+  <script is:inline>
+    (function () {
+      var root = document.getElementById('cal');
+      var busy = {};
+      JSON.parse(root.dataset.ocupacion).forEach(function (o) { busy[o.fecha] = o.motivo || 'Ocupado'; });
+      var body = document.getElementById('cal-body');
+      var title = document.getElementById('cal-title');
+      var now = new Date(); var y = now.getFullYear(), m = now.getMonth();
+      var months = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+      function pad(n) { return String(n).padStart(2, '0'); }
+      function render() {
+        title.textContent = months[m] + ' ' + y;
+        var first = new Date(y, m, 1);
+        var offset = (first.getDay() + 6) % 7;
+        var days = new Date(y, m + 1, 0).getDate();
+        var todayKey = now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate());
+        var html = '', d = 1 - offset;
+        for (var w = 0; w < 6; w++) {
+          if (d > days) break;
+          html += '<tr>';
+          for (var i = 0; i < 7; i++, d++) {
+            if (d < 1 || d > days) { html += '<td class="out"></td>'; continue; }
+            var key = y + '-' + pad(m + 1) + '-' + pad(d);
+            var cls = [busy[key] ? 'busy' : '', key === todayKey ? 'today' : ''].join(' ').trim();
+            var extra = busy[key] ? '<span class="sr-only"> ocupado' + (busy[key] !== 'Ocupado' ? ': ' + busy[key].replace(/</g, '&lt;') : '') + '</span>' : '';
+            html += '<td' + (cls ? ' class="' + cls + '"' : '') + (busy[key] ? ' title="Ocupado"' : '') + '>' + d + extra + '</td>';
+          }
+          html += '</tr>';
+        }
+        body.innerHTML = html;
+      }
+      document.getElementById('cal-prev').addEventListener('click', function () { m--; if (m < 0) { m = 11; y--; } render(); });
+      document.getElementById('cal-next').addEventListener('click', function () { m++; if (m > 11) { m = 0; y++; } render(); });
+      render();
+    })();
+  </script>
+</Base>

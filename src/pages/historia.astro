@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import CuerpoRico from '../components/CuerpoRico.astro';
+import { getHistoria } from '../lib/content';
+const h = await getHistoria();
+---
+<Base title="Historia de Arbejales" description="Textos, historias y fotos sobre la historia del barrio de Arbejales, en Teror.">
+  <PageHead title="Historia de Arbejales" intro="Textos y fotos recopilados por Boni sobre el barrio y sus gentes." />
+  <div class="container section">
+    <div class="prose historia">
+      <CuerpoRico bloques={h?.cuerpo} />
+    </div>
+  </div>
+</Base>

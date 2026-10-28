@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-label="Local de la asociación (imagen de ejemplo)">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#dde7df"/>
+      <stop offset="1" stop-color="#a9c2b2"/>
+    </linearGradient>
+    <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#587263"/>
+      <stop offset="1" stop-color="#3d5145"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="800" fill="url(#sky)"/>
+  <circle cx="1030" cy="170" r="86" fill="#f6f1d6" opacity=".85"/>
+  <path d="M0 560 260 430 470 555 700 400 940 570 1120 470 1280 570v230H0z" fill="#7f9a8a" opacity=".72"/>
+  <path d="M0 660 300 555 560 665 830 570 1080 655 1280 600v200H0z" fill="url(#ground)"/>
+  
+    <g fill="#3d5145">
+      <path d="M150 690V590l70-48 70 48v100z"/>
+      <path d="M330 690V570l86-58 86 58v120z"/>
+      <path d="M540 690V606l58-40 58 40v84z"/>
+    </g>
+    <g fill="#dde7df">
+      <rect x="196" y="620" width="24" height="34"/>
+      <rect x="392" y="606" width="26" height="36"/>
+      <rect x="578" y="628" width="22" height="30"/>
+    </g>
+  <g>
+    <rect x="44" y="44" width="196" height="44" rx="22" fill="#3a1a15" opacity=".55"/>
+    <text x="142" y="73" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="19" font-weight="600" letter-spacing="1.5" fill="#fbf5ea">FOTO DE EJEMPLO</text>
+  </g>
+  <text x="48" y="752" font-family="Inter, system-ui, sans-serif" font-size="26" font-weight="600" fill="#fbf5ea" opacity=".9">Local de la asociación</text>
+</svg>

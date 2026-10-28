@@ -1,0 +1,24 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
+import Icon from '../../components/Icon.astro';
+const sub = [
+  { href: '/rancho-de-animas/historia', label: 'Historia del Rancho de Ánimas', icon: 'history', blurb: 'Cómo nació y qué significa esta tradición.' },
+  { href: '/rancho-de-animas/videos', label: 'Vídeos del Rancho de Ánimas', icon: 'play', blurb: 'Grabaciones de sus actuaciones.' },
+];
+---
+<Base title="Rancho de Ánimas Arbejales" description="Historia y vídeos del Rancho de Ánimas de Arbejales, en Teror.">
+  <PageHead title="Rancho de Ánimas Arbejales" intro="Una tradición viva del barrio." />
+  <div class="container section">
+    <div class="grid">
+      {sub.map((s) => (
+        <a class="card tile" href={s.href}>
+          <span class="ico"><Icon name={s.icon} /></span>
+          <h3>{s.label}</h3>
+          <p>{s.blurb}</p>
+          <span class="more">Entrar <Icon name="arrow" size={18} /></span>
+        </a>
+      ))}
+    </div>
+  </div>
+</Base>

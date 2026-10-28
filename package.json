@@ -1,0 +1,30 @@
+{
+  "name": "asociacion-vecinos-arbejales-web",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "seed": "node scripts/seed-sanity.mjs",
+    "mock:images": "node scripts/mock-images.mjs",
+    "mock:docs": "sh scripts/mock-docs.sh"
+  },
+  "dependencies": {
+    "@astrojs/react": "^7.1.1",
+    "@sanity/astro": "^3.5.1",
+    "@sanity/client": "^8.10.1",
+    "@sanity/locale-es-es": "^1.2.39",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@types/react-is": "^19.3.0",
+    "astro": "^7.4.2",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-is": "^19.3.1",
+    "sanity": "^6.20.0",
+    "styled-components": "^6.6.0"
+  }
+}

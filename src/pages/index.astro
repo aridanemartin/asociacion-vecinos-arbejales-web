@@ -1,0 +1,79 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { site, nav } from '../data/site';
+import { getNovedades, imgUrl } from '../lib/content';
+const novedades = await getNovedades();
+const fmt = new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+---
+<Base>
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <p class="eyebrow">{site.place}</p>
+        <h1>Bienvenidos a Arbejales</h1>
+        <p class="lead">Espacio de la {site.name}: noticias del barrio, su historia, documentos y servicios para los vecinos.</p>
+      </div>
+      <img class="hero-logo" src="/img/logo-completo.webp" alt="Logo de Arbejales, un pueblo con corazón: un corazón con la iglesia y los campos del barrio" width="1000" height="833" />
+    </div>
+  </section>
+
+  <section aria-labelledby="novedades-titulo">
+    <div class="container">
+      <div class="carousel-head">
+        <h2 id="novedades-titulo">Noticias, eventos y convocatorias</h2>
+        <div class="carousel-controls">
+          <button class="icon-btn" type="button" data-dir="-1" aria-label="Anteriores"><Icon name="prev" /></button>
+          <button class="icon-btn" type="button" data-dir="1" aria-label="Siguientes"><Icon name="next" /></button>
+        </div>
+      </div>
+      {novedades.length === 0 && <p class="empty">Pronto publicaremos aquí las noticias, eventos y convocatorias de la asociación.</p>}
+      <ul class="carousel" id="carrusel" style="list-style:none;margin:0;padding:0 0 12px" tabindex="0" aria-label="Lista de noticias, eventos y convocatorias, desplazable">
+        {novedades.map((n) => (
+          <li class="card news">
+            <div class="news-media">
+              {n.foto ? <img src={imgUrl(n.foto, 800)} alt={n.foto.alt} loading="lazy" width="640" height="400" /> : (
+                <div class="media-placeholder"><Icon name="image" size={40} /></div>
+              )}
+            </div>
+            <div class="news-body">
+              <span class="tag" data-kind={n.etiqueta}>{n.etiqueta}</span>
+              <h3>{n.enlace ? <a href={n.enlace}>{n.titulo}</a> : n.titulo}</h3>
+              <time datetime={n.fecha}>{fmt.format(new Date(n.fecha))}</time>
+              <p>{n.resumen}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="secciones-titulo">
+    <div class="container">
+      <h2 id="secciones-titulo">¿Qué buscas?</h2>
+      <div class="grid">
+        {nav.map((n) => (
+          <a class="card tile" href={n.href}>
+            <span class="ico"><Icon name={n.icon} /></span>
+            <h3>{n.label}</h3>
+            <p>{n.blurb}</p>
+            <span class="more">Entrar <Icon name="arrow" size={18} /></span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      var c = document.getElementById('carrusel');
+      document.querySelectorAll('[data-dir]').forEach(function (b) {
+        b.addEventListener('click', function () {
+          var step = c.firstElementChild ? c.firstElementChild.getBoundingClientRect().width + 16 : 300;
+          var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          c.scrollBy({ left: Number(b.dataset.dir) * step, behavior: reduce ? 'auto' : 'smooth' });
+        });
+      });
+    })();
+  </script>
+</Base>

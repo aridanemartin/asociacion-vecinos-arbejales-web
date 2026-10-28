@@ -1,0 +1,66 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import { site } from '../data/site';
+const endpoint = `https://formsubmit.co/${site.suggestionsEmail}`;
+---
+<Base title="Sugerencias" description="Envía tus sugerencias sobre la gestión de la asociación de vecinos.">
+  <PageHead title="Sugerencias" intro="Tu opinión ayuda a mejorar la gestión de la asociación." />
+  <div class="container section">
+    <div class="notice" style="max-width:40rem;margin-bottom:32px">
+      <p><strong>Antes de escribir:</strong> las sugerencias deben referirse a la <strong>gestión de la asociación</strong>. Las incidencias de luz, agua, alcantarillado, carreteras, etc. quedan fuera de nuestra competencia y deben reclamarse al Ayuntamiento.</p>
+    </div>
+
+    <form class="form" id="form" method="post" action={endpoint} novalidate>
+      <input type="hidden" name="_subject" value="Nueva sugerencia desde la web" />
+      <input type="hidden" name="_captcha" value="false" />
+      <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+      <div class="field">
+        <label for="nombre">Nombre <span class="hint">(opcional)</span></label>
+        <input id="nombre" name="nombre" type="text" autocomplete="name" />
+      </div>
+      <div class="field">
+        <label for="email">Correo electrónico <span class="hint">(opcional, si quieres respuesta)</span></label>
+        <input id="email" name="email" type="email" autocomplete="email" />
+      </div>
+      <div class="field">
+        <label for="mensaje">Tu sugerencia <span aria-hidden="true">*</span><span class="sr-only">(obligatorio)</span></label>
+        <textarea id="mensaje" name="mensaje" required aria-describedby="mensaje-hint mensaje-error"></textarea>
+        <span id="mensaje-hint" class="hint">Cuéntanos qué propones y por qué.</span>
+        <span id="mensaje-error" class="form-status" data-state="error" role="alert"></span>
+      </div>
+      <div class="check">
+        <input id="ambito" name="ambito" type="checkbox" required />
+        <label for="ambito">Confirmo que mi sugerencia trata sobre la gestión de la asociación y no es una incidencia municipal. <span class="sr-only">(obligatorio)</span></label>
+      </div>
+      <div>
+        <button class="btn" type="submit" id="enviar">Enviar sugerencia</button>
+      </div>
+      <p id="estado" class="form-status" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+
+  <script is:inline define:vars={{ endpoint: endpoint.replace('formsubmit.co/', 'formsubmit.co/ajax/') }}>
+    (function () {
+      var form = document.getElementById('form');
+      var estado = document.getElementById('estado');
+      var err = document.getElementById('mensaje-error');
+      var msg = document.getElementById('mensaje');
+      var chk = document.getElementById('ambito');
+      var btn = document.getElementById('enviar');
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        err.textContent = ''; estado.textContent = ''; estado.removeAttribute('data-state');
+        if (!msg.value.trim()) { err.textContent = 'Escribe tu sugerencia antes de enviarla.'; msg.focus(); return; }
+        if (!chk.checked) { err.textContent = 'Confirma que la sugerencia trata sobre la gestión de la asociación.'; chk.focus(); return; }
+        if (form.elements._honey.value) return;
+        btn.disabled = true; estado.textContent = 'Enviando…';
+        fetch(endpoint, { method: 'POST', headers: { Accept: 'application/json' }, body: new FormData(form) })
+          .then(function (r) { if (!r.ok) throw new Error(); form.reset(); estado.dataset.state = 'ok'; estado.textContent = '¡Gracias! Hemos recibido tu sugerencia.'; })
+          .catch(function () { estado.dataset.state = 'error'; estado.textContent = 'No se ha podido enviar. Inténtalo de nuevo más tarde.'; })
+          .finally(function () { btn.disabled = false; });
+      });
+    })();
+  </script>
+</Base>

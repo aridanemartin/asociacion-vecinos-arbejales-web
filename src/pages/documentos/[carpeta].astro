@@ -1,0 +1,30 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
+import Icon from '../../components/Icon.astro';
+import { carpetas, getArchivos } from '../../lib/content';
+export function getStaticPaths() {
+  return carpetas.map((c) => ({ params: { carpeta: c.slug }, props: { c } }));
+}
+const { c } = Astro.props;
+const archivos = await getArchivos(c.slug);
+---
+<Base title={c.titulo}>
+  <PageHead title={c.titulo} intro={c.descripcion} trail={[{ href: '/documentos', label: 'Documentos' }]} />
+  <div class="container section">
+    {archivos.length === 0 ? (
+      <p class="empty">Todavía no hay archivos en esta carpeta.</p>
+    ) : (
+      <ul class="file-list">
+        {archivos.map((a) => (
+          <li>
+            <a class="card" href={a.url} download={a.nombre} target="_blank" rel="noopener noreferrer">
+              <Icon name="file" /> <span>{a.titulo}</span>
+              {a.fecha && <time datetime={a.fecha}>{a.fecha}</time>}
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+</Base>

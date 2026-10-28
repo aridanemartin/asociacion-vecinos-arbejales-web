@@ -1,0 +1,31 @@
+---
+import { imgUrl } from '../lib/content';
+import { agruparCuerpo } from '../lib/portable';
+import type { Bloque } from '../lib/types';
+
+// Pinta el texto enriquecido del panel: párrafos, títulos, listas, citas y las
+// fotos intercaladas entre ellos.
+const { bloques = [] } = Astro.props as { bloques?: Bloque[] };
+const grupos = agruparCuerpo(bloques.filter((b) => b._type !== 'foto' || Boolean(b.url)));
+---
+{grupos.map((grupo) =>
+  grupo.tipo === 'foto' ? (
+    <figure class="photo-box">
+      <img src={imgUrl({ url: grupo.bloque.url, alt: grupo.bloque.alt })} alt={grupo.bloque.alt} loading="lazy" />
+    </figure>
+  ) : grupo.tipo === 'lista' ? (
+    grupo.ordenada ? (
+      <ol>{grupo.items.map((html) => <li set:html={html} />)}</ol>
+    ) : (
+      <ul>{grupo.items.map((html) => <li set:html={html} />)}</ul>
+    )
+  ) : grupo.etiqueta === 'h2' ? (
+    <h2 set:html={grupo.html} />
+  ) : grupo.etiqueta === 'h3' ? (
+    <h3 set:html={grupo.html} />
+  ) : grupo.etiqueta === 'blockquote' ? (
+    <blockquote set:html={grupo.html} />
+  ) : (
+    <p set:html={grupo.html} />
+  ),
+)}

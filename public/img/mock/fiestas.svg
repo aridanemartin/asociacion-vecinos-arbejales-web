@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-label="Fiestas del barrio (imagen de ejemplo)">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f7dcc9"/>
+      <stop offset="1" stop-color="#dba38f"/>
+    </linearGradient>
+    <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6e4638"/>
+      <stop offset="1" stop-color="#4a2e26"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="800" fill="url(#sky)"/>
+  <circle cx="1030" cy="170" r="86" fill="#ffe9c9" opacity=".85"/>
+  <path d="M0 560 260 430 470 555 700 400 940 570 1120 470 1280 570v230H0z" fill="#9d6b58" opacity=".72"/>
+  <path d="M0 660 300 555 560 665 830 570 1080 655 1280 600v200H0z" fill="url(#ground)"/>
+  
+    <g fill="#4a2e26">
+      <path d="M230 700c-46 0-78-32-78-72 0-48 38-80 84-80-6-40 30-72 70-72s76 30 76 72c40 2 70 34 70 76 0 42-32 76-76 76z"/>
+      <rect x="262" y="690" width="24" height="70"/>
+      <path d="M560 700c-38 0-64-26-64-60 0-36 28-62 66-64 2-32 30-56 64-56s62 24 64 56c34 4 58 30 58 62 0 34-28 62-62 62z"/>
+      <rect x="612" y="692" width="20" height="66"/>
+    </g>
+  <g>
+    <rect x="44" y="44" width="196" height="44" rx="22" fill="#3a1a15" opacity=".55"/>
+    <text x="142" y="73" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="19" font-weight="600" letter-spacing="1.5" fill="#fbf5ea">FOTO DE EJEMPLO</text>
+  </g>
+  <text x="48" y="752" font-family="Inter, system-ui, sans-serif" font-size="26" font-weight="600" fill="#fbf5ea" opacity=".9">Fiestas del barrio</text>
+</svg>

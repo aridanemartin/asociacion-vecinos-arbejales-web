@@ -1,0 +1,48 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import Icon from '../components/Icon.astro';
+import { getTelefonos } from '../lib/content';
+const contactos = await getTelefonos();
+const host = (url: string) => new URL(url).hostname.replace(/^www\./, '');
+---
+<Base title="Contactos" description="Teléfonos y páginas web de servicios municipales de Teror.">
+  <PageHead title="Contactos" intro="Teléfonos y webs de servicios del municipio de Teror." />
+  <div class="container section">
+    <ul class="file-list contactos">
+      {contactos.map((c) => (
+        <li class="card contacto">
+          <div class="contacto-info">
+            <strong>{c.nombre}</strong>
+            {c.nota && <span class="nota">{c.nota}</span>}
+          </div>
+          <div class="contacto-acciones">
+            {c.numero && (
+              <a class="accion" href={`tel:${c.numero.replace(/\s/g, '')}`}>
+                <Icon name="phone" size={20} />
+                <span class="sr-only">Llamar a {c.nombre}: </span>{c.numero}
+              </a>
+            )}
+            {c.web && (
+              <a class="accion" href={c.web} target="_blank" rel="noopener noreferrer">
+                <Icon name="external" size={20} />
+                <span class="sr-only">Página web de {c.nombre}: </span>{host(c.web)}
+                <span class="sr-only">(se abre en una pestaña nueva)</span>
+              </a>
+            )}
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</Base>
+
+<style>
+  .contactos { max-width: 40rem; }
+  .nota { color: var(--color-muted-foreground); font-size: 0.9rem; }
+  .contacto { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3) var(--space-6); padding: var(--space-4) var(--space-6); }
+  .contacto-info { display: grid; gap: 2px; }
+  .contacto-acciones { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); }
+  .contacto .accion { display: inline-flex; align-items: center; gap: var(--space-2); min-height: 44px; padding: 0 var(--space-2); font-weight: 600; color: var(--color-primary); text-decoration: none; }
+  .contacto .accion:hover { text-decoration: underline; }
+</style>
