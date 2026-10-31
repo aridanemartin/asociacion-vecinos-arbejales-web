@@ -42,8 +42,6 @@ export const structure: StructureResolver = (S) =>
           S.list()
             .title('Documentos')
             .items([
-              single(S, 'paginaDocumentos', 'Foto de la página'),
-              S.divider(),
               ...CARPETAS.map((c) =>
                 S.listItem()
                   .title(`Carpeta: ${c.title}`)

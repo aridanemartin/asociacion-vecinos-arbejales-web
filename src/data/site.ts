@@ -16,7 +16,7 @@ export const nav: NavItem[] = [
   { href: '/rancho-de-animas', label: 'Rancho de Ánimas', short: 'Rancho de Ánimas', icon: 'music', blurb: 'Historia y vídeos del Rancho de Ánimas de Arbejales.' },
   { href: '/nuestras-fiestas', label: 'Nuestras fiestas', short: 'Fiestas', icon: 'party', blurb: 'Cómo celebramos las fiestas y fotos de años anteriores.' },
   { href: '/iglesia-y-cementerio', label: 'Iglesia y cementerio', short: 'Iglesia y cementerio', icon: 'church', blurb: 'Horarios de misas, cementerio y archivo parroquial.' },
-  { href: '/documentos', label: 'Documentos de la asociación', short: 'Documentos', icon: 'file', blurb: 'Estatutos, actas, cuentas y memorias anuales.' },
+  { href: '/documentos', label: 'Documentos de la asociación', short: 'Documentos', icon: 'file', blurb: 'Estatutos, actas y memorias anuales.' },
   { href: '/disponibilidad-local', label: 'Disponibilidad del local', short: 'Local', icon: 'calendar', blurb: 'Consulta qué días está ocupado el local.' },
   { href: '/sugerencias', label: 'Sugerencias', short: 'Sugerencias', icon: 'message', blurb: 'Haz llegar tus propuestas a la directiva.' },
   { href: '/contactos', label: 'Contactos', short: 'Contactos', icon: 'phone', blurb: 'Teléfonos y webs de servicios municipales.' },

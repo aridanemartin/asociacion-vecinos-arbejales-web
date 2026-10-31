@@ -24,20 +24,23 @@ const current = (href: string) => path === href || path.startsWith(href + '/');
     <header class="site-header">
       <div class="container header-row">
         <a class="brand" href="/">
-          <img src="/img/logo-simbolo.png" alt="" width="60" height="60" />
-          <span>
-            <span class="brand-name">{site.name}</span>
-            <span class="brand-place">{site.place}</span>
-          </span>
+          <img src="/img/logo-completo.webp" alt={`${site.place}, un pueblo con corazón · ${site.name} (ir al inicio)`} width="1000" height="833" />
         </a>
-        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu-principal">Menú</button>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu-principal" aria-label="Abrir menú">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </header>
     <nav class="main-nav" id="menu-principal" aria-label="Secciones" data-open="false">
       <div class="container">
         <ul>
-          {nav.map((n) => (
-            <li><a href={n.href} aria-current={current(n.href) ? 'page' : undefined}>{n.short}</a></li>
+          {nav.map((n, i) => (
+            <li style={`--i:${i}`}>
+              <a href={n.href} aria-current={current(n.href) ? 'page' : undefined}>
+                <span class="nav-short">{n.short}</span>
+                <span class="nav-long">{n.label}</span>
+              </a>
+            </li>
           ))}
         </ul>
       </div>
@@ -65,16 +68,36 @@ const current = (href: string) => path === href || path.startsWith(href + '/');
         var menu = document.getElementById('menu-principal');
         if (!btn || !menu) return;
         var mq = window.matchMedia('(max-width: 62rem)');
-        function sync() { if (!mq.matches) { menu.dataset.open = 'true'; btn.setAttribute('aria-expanded', 'true'); } else { menu.dataset.open = 'false'; btn.setAttribute('aria-expanded', 'false'); } }
-        sync(); mq.addEventListener('change', sync);
+        var behind = document.querySelectorAll('main, .site-footer, .credit, .skip-link');
+
+        function setOpen(open) {
+          if (open) {
+            // El círculo del menú nace en el botón.
+            var r = btn.getBoundingClientRect();
+            menu.style.setProperty('--ox', r.left + r.width / 2 + 'px');
+            menu.style.setProperty('--oy', r.top + r.height / 2 + 'px');
+          }
+          menu.dataset.open = String(open);
+          btn.setAttribute('aria-expanded', String(open));
+          btn.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+          document.documentElement.classList.toggle('menu-open', open);
+          behind.forEach(function (el) { el.inert = open; });
+          if (open) {
+            var first = menu.querySelector('a');
+            if (first) setTimeout(function () { first.focus({ preventScroll: true }); }, 50);
+          }
+        }
+
         btn.addEventListener('click', function () {
-          var open = btn.getAttribute('aria-expanded') === 'true';
-          btn.setAttribute('aria-expanded', String(!open));
-          menu.dataset.open = String(!open);
+          setOpen(btn.getAttribute('aria-expanded') !== 'true');
+        });
+        menu.addEventListener('click', function (e) {
+          if (e.target.closest('a')) setOpen(false);
         });
         document.addEventListener('keydown', function (e) {
-          if (e.key === 'Escape' && mq.matches && btn.getAttribute('aria-expanded') === 'true') { btn.click(); btn.focus(); }
+          if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') { setOpen(false); btn.focus(); }
         });
+        mq.addEventListener('change', function () { setOpen(false); });
       })();
     </script>
   </body>

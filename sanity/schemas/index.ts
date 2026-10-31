@@ -7,7 +7,6 @@ import {
   iglesiaCementerio,
   nuestrasFiestas,
   ocupacionLocal,
-  paginaDocumentos,
   ranchoAnimas,
   telefono,
   video,
@@ -22,11 +21,10 @@ export const schemaTypes = [
   nuestrasFiestas,
   fiestaAnio,
   iglesiaCementerio,
-  paginaDocumentos,
   documento,
   ocupacionLocal,
   telefono,
 ]
 
 // Documentos que solo existen una vez (no se pueden crear ni borrar).
-export const SINGLETONS = ['historia', 'ranchoAnimas', 'nuestrasFiestas', 'iglesiaCementerio', 'paginaDocumentos']
+export const SINGLETONS = ['historia', 'ranchoAnimas', 'nuestrasFiestas', 'iglesiaCementerio']

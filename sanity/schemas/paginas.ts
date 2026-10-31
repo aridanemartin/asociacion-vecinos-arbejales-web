@@ -75,6 +75,13 @@ export const video = defineType({
   name: 'video',
   title: 'Vídeo del Rancho de Ánimas',
   type: 'document',
+  orderings: [
+    {
+      title: 'Orden de la lista',
+      name: 'ordenAsc',
+      by: [{field: 'orden', direction: 'asc'}],
+    },
+  ],
   fields: [
     defineField({
       name: 'titulo',
@@ -82,6 +89,15 @@ export const video = defineType({
       type: 'string',
       description: 'Por ejemplo: «Actuación del Rancho de Ánimas, Navidad 2025».',
       validation: (r) => r.required().max(100).error('Escriba un título para el vídeo.'),
+    }),
+    defineField({
+      name: 'orden',
+      title: 'Orden en la lista',
+      type: 'number',
+      description:
+        'Los vídeos se muestran de menor a mayor: el 1 aparece primero. Si lo deja vacío, el vídeo se coloca al final.',
+      initialValue: 10,
+      validation: (r) => r.integer().min(0),
     }),
     defineField({
       name: 'enlace',
@@ -148,26 +164,10 @@ export const iglesiaCementerio = defineType({
   preview: {prepare: () => ({title: 'Iglesia y cementerio: horarios y fotos'})},
 })
 
-// 4 · Documentos: la foto de la página (los archivos son documentos aparte)
-export const paginaDocumentos = defineType({
-  name: 'paginaDocumentos',
-  title: 'Foto de la página de documentos',
-  type: 'document',
-  fields: [
-    defineField({
-      name: 'foto',
-      title: 'Foto de la página',
-      type: 'foto',
-      description: 'Foto que aparece en la parte de arriba de la página «Documentos de la asociación de vecinos».',
-    }),
-  ],
-  preview: {prepare: () => ({title: 'Foto de la página de documentos'})},
-})
-
+// 4 · Documentos (los archivos son documentos aparte)
 export const CARPETAS = [
   {title: 'Estatutos de la asociación', value: 'estatutos'},
   {title: 'Actas de la asociación', value: 'actas'},
-  {title: 'Estado de cuentas anual', value: 'cuentas'},
   {title: 'Memoria de actividades anual', value: 'memorias'},
 ]
 

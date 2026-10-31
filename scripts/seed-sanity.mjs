@@ -13,10 +13,8 @@ import { createReadStream, existsSync, readFileSync } from 'node:fs';
 import { basename, extname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
-  mockDocumentos,
   mockFiestas,
   mockFiestasAnios,
-  mockFotoDocumentos,
   mockHistoria,
   mockIglesia,
   mockNovedades,
@@ -117,11 +115,6 @@ const cuerpoDesdeMock = (bloques) =>
     }),
   );
 
-async function archivo(a) {
-  const ref = await subir(a.url, 'file');
-  return { _type: 'file', asset: { _type: 'reference', _ref: ref } };
-}
-
 // ── Documentos ───────────────────────────────────────────────────────────────
 const docs = [];
 
@@ -157,6 +150,7 @@ for (const [i, v] of mockVideos.entries()) {
   docs.push({
     _id: `video-${i + 1}`,
     _type: 'video',
+    orden: i + 1,
     titulo: v.titulo,
     enlace: `https://youtu.be/${v.youtubeId}`,
   });
@@ -187,26 +181,6 @@ docs.push({
   horarioArchivo: mockIglesia.horarioArchivo,
   fotos: await fotos(mockIglesia.fotos),
 });
-
-// 4 · Documentos
-docs.push({
-  _id: 'paginaDocumentos',
-  _type: 'paginaDocumentos',
-  foto: await foto(mockFotoDocumentos),
-});
-
-for (const [carpeta, lista] of Object.entries(mockDocumentos)) {
-  for (const [i, a] of lista.entries()) {
-    docs.push({
-      _id: `documento-${carpeta}-${i + 1}`,
-      _type: 'documento',
-      carpeta,
-      titulo: a.titulo,
-      ...(a.fecha ? { fecha: a.fecha } : {}),
-      archivo: await archivo(a),
-    });
-  }
-}
 
 // 5 · Disponibilidad del local (días consecutivos con el mismo motivo → un solo documento)
 const rangos = [];

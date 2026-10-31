@@ -1,20 +1,40 @@
 ---
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
-import { site, nav } from '../data/site';
+import { nav } from '../data/site';
 import { getNovedades, imgUrl } from '../lib/content';
 const novedades = await getNovedades();
 const fmt = new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 ---
 <Base>
-  <section class="hero">
-    <div class="container hero-grid">
-      <div>
-        <p class="eyebrow">{site.place}</p>
-        <h1>Bienvenidos a Arbejales</h1>
-        <p class="lead">Espacio de la {site.name}: noticias del barrio, su historia, documentos y servicios para los vecinos.</p>
+  <section class="section" aria-labelledby="asociacion-titulo">
+    <div class="container">
+      <div class="two-col intro-asociacion">
+        <div class="prose">
+          <h1 id="asociacion-titulo">Asociación de vecinos Llano Roque - Arbejales</h1>
+          <p>
+            La Asociación de vecinos Llano Roque - Arbejales (antes San Marcos) fue constituida en 1977 por un grupo
+            de vecinos de Arbejales con el objeto de luchar por mejoras para el barrio, mantener sus tradiciones y
+            fomentar la unión vecinal.
+          </p>
+          <p>
+            Actualmente su presidente es D. Jose Vicente Montesdeoca Rivero, el número de socios es de unos 150, y tras
+            medio siglo de existencia, mantiene la misma vocación de servicio a nuestros socios y a Arbejales.
+          </p>
+          <p>
+            Su local social se encuentra en la calle Juan Quintana Quintana, n.º 8, Arbejales (Teror).
+          </p>
+        </div>
+        <figure class="intro-foto">
+          <img
+            src="/img/iglesia-arbejales.webp"
+            alt="Iglesia de Arbejales engalanada con banderines y flores durante las fiestas del barrio"
+            width="1400"
+            height="934"
+            loading="lazy"
+          />
+        </figure>
       </div>
-      <img class="hero-logo" src="/img/logo-completo.webp" alt="Logo de Arbejales, un pueblo con corazón: un corazón con la iglesia y los campos del barrio" width="1000" height="833" />
     </div>
   </section>
 
@@ -32,8 +52,10 @@ const fmt = new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'long', ye
         {novedades.map((n) => (
           <li class="card news">
             <div class="news-media">
-              {n.foto ? <img src={imgUrl(n.foto, 800)} alt={n.foto.alt} loading="lazy" width="640" height="400" /> : (
-                <div class="media-placeholder"><Icon name="image" size={40} /></div>
+              {n.foto ? (
+                <img src={imgUrl(n.foto, 800)} alt={n.foto.alt} loading="lazy" width="640" height="400" />
+              ) : (
+                <img src="/img/arbejales-placeholder.webp" alt="" loading="lazy" width="640" height="427" />
               )}
             </div>
             <div class="news-body">
@@ -77,3 +99,18 @@ const fmt = new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'long', ye
     })();
   </script>
 </Base>
+
+<style>
+  .intro-foto {
+    margin: 0;
+    border-radius: var(--radius);
+    overflow: hidden;
+    aspect-ratio: 3 / 2;
+    box-shadow: var(--shadow);
+  }
+  .intro-foto img { width: 100%; height: 100%; object-fit: cover; }
+  .intro-asociacion .prose > h1:first-child { margin-top: 0; }
+  @media (min-width: 56rem) {
+    .two-col.intro-asociacion { align-items: center; }
+  }
+</style>

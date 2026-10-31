@@ -1,10 +1,8 @@
 import { createClient } from '@sanity/client';
 import { projectId, dataset } from '../../sanity/env';
 import {
-  mockArchivos,
   mockFiestas,
   mockFiestasAnios,
-  mockFotoDocumentos,
   mockHistoria,
   mockIglesia,
   mockNovedades,
@@ -88,7 +86,6 @@ async function conRespaldo<T>(
 export const carpetas: Carpeta[] = [
   { slug: 'estatutos', titulo: 'Estatutos de la asociación', descripcion: 'Normas que regulan el funcionamiento de la asociación.' },
   { slug: 'actas', titulo: 'Actas de la asociación', descripcion: 'Actas de las asambleas y reuniones de la directiva.' },
-  { slug: 'cuentas', titulo: 'Estado de cuentas anual', descripcion: 'Ingresos y gastos de cada ejercicio.' },
   { slug: 'memorias', titulo: 'Memoria de actividades anual', descripcion: 'Resumen de las actividades realizadas cada año.' },
 ];
 
@@ -162,7 +159,7 @@ const youtubeId = (url: string) =>
 export async function getVideos(): Promise<Video[]> {
   const rows = await conRespaldo<{ titulo: string; enlace: string }[]>(
     'vídeos del Rancho de Ánimas',
-    `*[_type == "video"] | order(_createdAt desc){ titulo, enlace }`,
+    `*[_type == "video"] | order(coalesce(orden, 9999) asc, _createdAt asc){ titulo, enlace }`,
     {},
     () => mockVideos.map((v) => ({ titulo: v.titulo, enlace: `https://youtu.be/${v.youtubeId}` })),
     (filas) => filas.length === 0,
@@ -183,26 +180,12 @@ export const getIglesia = () =>
     (iglesia) => !iglesia,
   );
 
-export async function getFotoDocumentos(): Promise<Foto | undefined> {
-  const r = await conRespaldo<{ foto?: Foto } | null>(
-    'la foto de la página de documentos',
-    `*[_id == "paginaDocumentos"][0]{ "foto": select(defined(foto.imagen.asset) => foto${FOTO}) }`,
-    {},
-    () => ({ foto: mockFotoDocumentos }),
-    (fila) => !fila?.foto,
-  );
-  return r?.foto ?? undefined;
-}
-
 export async function getArchivos(carpeta: string): Promise<Archivo[]> {
-  const rows = await conRespaldo<Archivo[]>(
-    'los documentos de la asociación',
+  const rows = await client.fetch<Archivo[]>(
     `*[_type == "documento" && carpeta == $carpeta && defined(archivo.asset)] | order(fecha desc, _createdAt desc){
       titulo, fecha, "url": archivo.asset->url, "nombre": archivo.asset->originalFilename
     }`,
     { carpeta },
-    () => mockArchivos(carpeta),
-    (filas) => filas.length === 0,
   );
 
   return rows.map((r) => ({ ...r, fecha: r.fecha ?? undefined }));

@@ -8,7 +8,6 @@
 // Las fotos y los PDF viven en public/img/mock y public/docs. Se generan con
 // `node scripts/mock-images.mjs` y `sh scripts/mock-docs.sh`.
 import type {
-  Archivo,
   BloqueFoto,
   BloqueTexto,
   DiaOcupado,
@@ -54,7 +53,6 @@ export const mockNovedades: Novedad[] = [
     fecha: '2026-11-14',
     resumen:
       'El sábado 14 de noviembre, a las 18:00, en el local social. Se tratarán el estado de cuentas del año, el calendario de actividades y la renovación de la junta directiva. Al terminar compartiremos un café con los vecinos que se acerquen.',
-    foto: foto('asamblea', 'Vecinos y vecinas reunidos en una asamblea de la asociación'),
   },
   {
     etiqueta: 'Noticia',
@@ -62,7 +60,6 @@ export const mockNovedades: Novedad[] = [
     fecha: '2026-10-10',
     resumen:
       'A partir de este mes, el local social permanecerá abierto los sábados de 17:00 a 20:00 para que los vecinos puedan reunirse, leer o jugar a las cartas. La apertura correrá a cargo de los miembros de la junta, que se irán turnando.',
-    foto: foto('local', 'Interior del local social de la asociación, con mesas y sillas'),
   },
   {
     etiqueta: 'Evento',
@@ -70,7 +67,6 @@ export const mockNovedades: Novedad[] = [
     fecha: '2026-09-28',
     resumen:
       'Hemos preparado talleres de memoria, un curso básico de teléfono móvil y dos salidas para conocer los caminos del barrio. Las inscripciones se pueden hacer en el local o escribiendo al correo de la asociación.',
-    foto: foto('fiestas', 'Vecinos disfrutando de una actividad al aire libre en el barrio'),
   },
   {
     etiqueta: 'Noticia',
@@ -78,7 +74,6 @@ export const mockNovedades: Novedad[] = [
     fecha: '2026-09-15',
     resumen:
       'Una treintena de vecinos participó en la limpieza del camino y de la plaza de la iglesia. Gracias a todos los que dedicaron su mañana. La asociación solicitará al Ayuntamiento que reponga los contenedores retirados.',
-    foto: foto('vecinos', 'Vecinos trabajando juntos en la limpieza de la plaza'),
     enlace: 'https://infonortedigital.com/',
   },
   {
@@ -87,7 +82,6 @@ export const mockNovedades: Novedad[] = [
     fecha: '2026-08-30',
     resumen:
       'El Ayuntamiento ha anunciado el arreglo del camino de Las Mesas. El jueves 3 de septiembre, a las 19:00, nos reuniremos en el local para recoger las aportaciones de los vecinos antes de la reunión con el concejal de Obras.',
-    foto: foto('camino', 'Camino de tierra entre castaños y muros de piedra'),
   },
   {
     etiqueta: 'Evento',
@@ -155,9 +149,11 @@ export const mockRancho: Rancho = {
 };
 
 export const mockVideos: Video[] = [
-  { titulo: 'Actuación del Rancho de Ánimas · Navidad 2025', youtubeId: 'aqz-KE-bpKQ' },
-  { titulo: 'Ronda de aguinaldos por las casas del barrio', youtubeId: 'ScMzIvxBSi4' },
-  { titulo: 'Encuentro de ranchos de la comarca en Teror', youtubeId: 'M7lc1UVf-VE' },
+  { titulo: 'Rancho de Ánimas de Arbejales-Teror, F. Cárdenes y P. Herrera, 1968-1969', youtubeId: 'iJnZJuWOnjE' },
+  { titulo: 'Rancho de Ánimas de Arbejales-Teror, Raíces, 1974', youtubeId: 'ZMGOOGA0Cqo' },
+  { titulo: 'Rancho de Ánimas de Arbejales-Teror, Pino Santo, 6/2/1982', youtubeId: 'ATmt-mGxN8w' },
+  { titulo: 'Rancho de Ánimas de Arbejales-Teror, Suso Ríos, 28/2/2026', youtubeId: 'mr_YEbFgC5Q' },
+  { titulo: 'Rancho de Ánimas de Arbejales-Teror: Con el timple a cuestas (6-07-2026)', youtubeId: 'UYq2bFe979I' },
 ];
 
 export const mockFiestas: Fiestas = {
@@ -217,87 +213,6 @@ export const mockIglesia: Iglesia = {
     foto('procesion', 'Salida de la imagen durante la procesión de la fiesta'),
   ],
 };
-
-export const mockFotoDocumentos: Foto = foto('documentos', 'Mesa con carpetas y documentos de la asociación');
-
-export const mockDocumentos: Record<string, Archivo[]> = {
-  estatutos: [
-    {
-      titulo: 'Estatutos vigentes de la asociación',
-      url: '/docs/estatutos-vigentes.pdf',
-      fecha: '2019-02-16',
-      nombre: 'estatutos-vigentes.pdf',
-    },
-    {
-      titulo: 'Reglamento de régimen interno',
-      url: '/docs/reglamento-regimen-interno.pdf',
-      fecha: '2022-05-21',
-      nombre: 'reglamento-regimen-interno.pdf',
-    },
-    {
-      titulo: 'Acta de constitución de la asociación',
-      url: '/docs/acta-constitucion.pdf',
-      fecha: '1998-06-14',
-      nombre: 'acta-constitucion.pdf',
-    },
-  ],
-  actas: [
-    {
-      titulo: 'Acta de la asamblea general de marzo de 2026',
-      url: '/docs/acta-asamblea-general-2026-03.pdf',
-      fecha: '2026-03-07',
-      nombre: 'acta-asamblea-general-2026-03.pdf',
-    },
-    {
-      titulo: 'Acta de la junta directiva de junio de 2026',
-      url: '/docs/acta-junta-directiva-2026-06.pdf',
-      fecha: '2026-06-12',
-      nombre: 'acta-junta-directiva-2026-06.pdf',
-    },
-    {
-      titulo: 'Acta de la asamblea general de noviembre de 2025',
-      url: '/docs/acta-asamblea-general-2025-11.pdf',
-      fecha: '2025-11-15',
-      nombre: 'acta-asamblea-general-2025-11.pdf',
-    },
-  ],
-  cuentas: [
-    {
-      titulo: 'Estado de cuentas del ejercicio 2025',
-      url: '/docs/cuentas-ejercicio-2025.pdf',
-      fecha: '2026-01-31',
-      nombre: 'cuentas-ejercicio-2025.pdf',
-    },
-    {
-      titulo: 'Presupuesto del ejercicio 2026',
-      url: '/docs/presupuesto-2026.pdf',
-      fecha: '2026-01-31',
-      nombre: 'presupuesto-2026.pdf',
-    },
-    {
-      titulo: 'Estado de cuentas del ejercicio 2024',
-      url: '/docs/cuentas-ejercicio-2024.pdf',
-      fecha: '2025-02-01',
-      nombre: 'cuentas-ejercicio-2024.pdf',
-    },
-  ],
-  memorias: [
-    {
-      titulo: 'Memoria de actividades de 2025',
-      url: '/docs/memoria-actividades-2025.pdf',
-      fecha: '2026-01-31',
-      nombre: 'memoria-actividades-2025.pdf',
-    },
-    {
-      titulo: 'Memoria de actividades de 2024',
-      url: '/docs/memoria-actividades-2024.pdf',
-      fecha: '2025-02-01',
-      nombre: 'memoria-actividades-2024.pdf',
-    },
-  ],
-};
-
-export const mockArchivos = (carpeta: string): Archivo[] => mockDocumentos[carpeta] ?? [];
 
 /** Días ocupados de ejemplo, siempre alrededor de la fecha de hoy. */
 export const mockOcupacion = (): DiaOcupado[] => [
