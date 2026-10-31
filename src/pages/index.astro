@@ -4,6 +4,11 @@ import Icon from '../components/Icon.astro';
 import { nav } from '../data/site';
 import { getNovedades, imgUrl } from '../lib/content';
 const novedades = await getNovedades();
+// Sanity guarda el tamaño en el nombre del archivo (…-1000x1414.webp): se usa para reservar el hueco de la foto.
+const medidas = (url: string) => {
+  const m = url.match(/-(\d+)x(\d+)\.\w+$/);
+  return m ? { width: Number(m[1]), height: Number(m[2]) } : { width: 640, height: 400 };
+};
 const fmt = new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 ---
 <Base>
@@ -67,7 +72,7 @@ const fmt = new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'long', ye
           <li class="card news">
             <div class="news-media">
               {n.foto ? (
-                <img src={imgUrl(n.foto, 800)} alt={n.foto.alt} loading="lazy" width="640" height="400" />
+                <img src={imgUrl(n.foto, 800)} alt={n.foto.alt} loading="lazy" {...medidas(n.foto.url)} />
               ) : (
                 <img src="/img/arbejales-placeholder.webp" alt="" loading="lazy" width="640" height="427" />
               )}
@@ -76,7 +81,8 @@ const fmt = new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'long', ye
               <span class="tag" data-kind={n.etiqueta}>{n.etiqueta}</span>
               <h3>{n.enlace ? <a href={n.enlace}>{n.titulo}</a> : n.titulo}</h3>
               <time datetime={n.fecha}>{fmt.format(new Date(n.fecha))}</time>
-              <p>{n.resumen}</p>
+              <p class="news-text">{n.resumen}</p>
+              <button class="news-more" type="button" hidden>Ver más<span class="sr-only">: {n.titulo}</span></button>
             </div>
           </li>
         ))}
@@ -100,9 +106,45 @@ const fmt = new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'long', ye
     </div>
   </section>
 
+  <dialog class="news-dialog" id="noticia-modal" aria-labelledby="noticia-modal-titulo">
+    <button class="news-dialog-close" type="button" aria-label="Cerrar">×</button>
+    <div class="news-dialog-content"></div>
+  </dialog>
+
   <script is:inline>
     (function () {
       var c = document.getElementById('carrusel');
+      var dlg = document.getElementById('noticia-modal');
+      var contenido = dlg.querySelector('.news-dialog-content');
+      var abridor = null;
+      // Limita el texto a unas líneas y muestra «Ver más» solo si se corta.
+      c.classList.add('clamp');
+      function revisar() {
+        c.querySelectorAll('.news').forEach(function (li) {
+          var p = li.querySelector('.news-text');
+          var b = li.querySelector('.news-more');
+          b.hidden = !(p.scrollHeight > p.clientHeight + 1);
+        });
+      }
+      revisar();
+      window.addEventListener('resize', revisar);
+      window.addEventListener('load', revisar);
+      c.querySelectorAll('.news-more').forEach(function (b) {
+        b.addEventListener('click', function () {
+          var li = b.closest('.news');
+          var copia = li.cloneNode(true);
+          copia.querySelector('.news-more').remove();
+          copia.classList.add('is-open');
+          copia.querySelector('h3').id = 'noticia-modal-titulo';
+          copia.querySelectorAll('img').forEach(function (i) { i.loading = 'eager'; });
+          contenido.replaceChildren(copia);
+          abridor = b;
+          dlg.showModal();
+        });
+      });
+      dlg.querySelector('.news-dialog-close').addEventListener('click', function () { dlg.close(); });
+      dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+      dlg.addEventListener('close', function () { if (abridor) abridor.focus(); });
       document.querySelectorAll('[data-dir]').forEach(function (b) {
         b.addEventListener('click', function () {
           var step = c.firstElementChild ? c.firstElementChild.getBoundingClientRect().width + 16 : 300;
@@ -144,7 +186,7 @@ const fmt = new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'long', ye
   }
   .hero-logo img {
     display: block;
-    width: clamp(180px, 30vw, 320px);
+    width: clamp(250px, 30vw, 320px);
     height: auto;
   }
   .intro-foto {

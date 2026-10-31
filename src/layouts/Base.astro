@@ -61,6 +61,12 @@ const current = (href: string) => path === href || path.startsWith(href + '/');
           <p>Página financiada por:</p>
           <img src="/img/cabildo-gran-canaria.jpg" alt="Cabildo de Gran Canaria" width="400" height="393" loading="lazy" />
         </div>
+        <p class="footer-social">
+          <a href={site.facebook} target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="currentColor"><path d="M13.5 22v-8.2h2.8l.5-3.3h-3.3V8.4c0-.9.4-1.7 1.8-1.7h1.6V3.8S15.5 3.5 14.2 3.5c-2.7 0-4.4 1.6-4.4 4.5v2.500H7v3.300h2.800V22h3.700z"/></svg>
+            Síguenos en Facebook<span class="sr-only"> (se abre en una pestaña nueva)</span>
+          </a>
+        </p>
         <p class="footer-meta">© {new Date().getFullYear()} {site.name} · {site.place}</p>
       </div>
     </footer>

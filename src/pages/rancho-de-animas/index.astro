@@ -27,11 +27,11 @@ const videos = await getVideos();
       ) : (
         <div class="video-grid">
           {videos.map((v) => (
-            <figure class="card video-card" data-id={v.youtubeId} data-titulo={v.titulo}>
+            <figure class="card video-card">
               <div class="video-frame">
-                <button class="video-play" type="button" aria-label={`Reproducir: ${v.titulo}`}>
+                <a class="video-play" href={`https://www.youtube.com/watch?v=${v.youtubeId}`} target="_blank" rel="noopener noreferrer" aria-label={`Ver en YouTube: ${v.titulo} (se abre en una pestaña nueva)`}>
                   <img src={`https://i.ytimg.com/vi/${v.youtubeId}/hqdefault.jpg`} alt="" loading="lazy" width="480" height="360" />
-                </button>
+                </a>
               </div>
               <figcaption>{v.titulo.replace(/^Rancho de Ánimas de Arbejales-Teror[,:]?\s*/, '') || v.titulo}</figcaption>
             </figure>
@@ -42,32 +42,6 @@ const videos = await getVideos();
   </div>
 </Base>
 
-<script>
-  // El vídeo se carga solo al pulsar la miniatura y solo suena uno a la vez:
-  // al reproducir otro, el anterior vuelve a su miniatura.
-  const cards = Array.from(document.querySelectorAll<HTMLElement>('.video-card'));
-  const miniaturas = new Map(cards.map((c) => [c, c.querySelector('.video-frame')!.innerHTML]));
-
-  const parar = (card: HTMLElement) => {
-    const frame = card.querySelector('.video-frame');
-    if (frame?.querySelector('iframe')) frame.innerHTML = miniaturas.get(card)!;
-  };
-
-  cards.forEach((card) => {
-    card.querySelector('.video-frame')!.addEventListener('click', (e) => {
-      if (!(e.target as HTMLElement).closest('.video-play')) return;
-      cards.forEach((c) => c !== card && parar(c));
-      const iframe = document.createElement('iframe');
-      iframe.src = `https://www.youtube-nocookie.com/embed/${card.dataset.id}?rel=0&autoplay=1`;
-      iframe.title = card.dataset.titulo ?? 'Vídeo del Rancho de Ánimas';
-      iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
-      iframe.allowFullscreen = true;
-      card.querySelector('.video-frame')!.replaceChildren(iframe);
-      iframe.focus();
-    });
-  });
-</script>
-
 <style>
   .rancho-historia { max-width: 46rem; margin-inline: auto; }
   .rancho-videos { margin-top: var(--space-12); }
@@ -75,8 +49,9 @@ const videos = await getVideos();
   .video-grid { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr)); }
   .video-card { margin: 0; }
   .video-frame { position: relative; aspect-ratio: 16 / 9; background: #000; }
-  .video-frame iframe, .video-play, .video-play img { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .video-play, .video-play img { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
   .video-play { padding: 0; cursor: pointer; background: #000; display: block; }
+  .video-play:focus-visible { outline: 3px solid var(--color-primary); outline-offset: -3px; }
   .video-play img { object-fit: cover; }
   .video-play::before { content: ''; position: absolute; z-index: 1; top: 50%; left: 50%; width: 64px; height: 64px; margin: -32px 0 0 -32px; border-radius: 50%; background: rgb(174 53 40 / 0.92); box-shadow: 0 2px 10px rgb(0 0 0 / 0.35); transition: transform 150ms var(--ease); }
   .video-play::after { content: ''; position: absolute; z-index: 1; top: 50%; left: 50%; margin: -12px 0 0 -10px; border-left: 20px solid #fff; border-top: 12px solid transparent; border-bottom: 12px solid transparent; }
