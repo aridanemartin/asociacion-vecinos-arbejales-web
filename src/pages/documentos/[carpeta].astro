@@ -10,7 +10,7 @@ const { c } = Astro.props;
 const archivos = await getArchivos(c.slug);
 ---
 <Base title={c.titulo}>
-  <PageHead title={c.titulo} intro={c.descripcion} trail={[{ href: '/documentos', label: 'Documentos' }]} />
+  <PageHead title={c.titulo} intro={c.descripcion} />
   <div class="container section">
     {archivos.length === 0 ? (
       <p class="empty">Todavía no hay archivos en esta carpeta.</p>

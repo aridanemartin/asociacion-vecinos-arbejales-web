@@ -9,7 +9,7 @@ const videos = await getVideos();
 <Base title="Rancho de Ánimas Arbejales" description="Historia y vídeos del Rancho de Ánimas de Arbejales, en Teror.">
   <PageHead title="Rancho de Ánimas Arbejales" intro="Una tradición viva del barrio." />
   <div class="container section">
-    <section aria-labelledby="historia-titulo">
+    <section class="rancho-historia" aria-labelledby="historia-titulo">
       <h2 id="historia-titulo">Historia</h2>
       <div class="prose historia">
         {r?.cuerpo?.length ? (
@@ -43,23 +43,33 @@ const videos = await getVideos();
 </Base>
 
 <script>
-  // El vídeo se carga solo al pulsar la miniatura: la página pesa menos y no se conecta a YouTube hasta entonces.
-  document.querySelectorAll<HTMLElement>('.video-card').forEach((card) => {
-    card.querySelector('.video-play')?.addEventListener('click', () => {
-      const frame = card.querySelector('.video-frame');
-      if (!frame) return;
+  // El vídeo se carga solo al pulsar la miniatura y solo suena uno a la vez:
+  // al reproducir otro, el anterior vuelve a su miniatura.
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('.video-card'));
+  const miniaturas = new Map(cards.map((c) => [c, c.querySelector('.video-frame')!.innerHTML]));
+
+  const parar = (card: HTMLElement) => {
+    const frame = card.querySelector('.video-frame');
+    if (frame?.querySelector('iframe')) frame.innerHTML = miniaturas.get(card)!;
+  };
+
+  cards.forEach((card) => {
+    card.querySelector('.video-frame')!.addEventListener('click', (e) => {
+      if (!(e.target as HTMLElement).closest('.video-play')) return;
+      cards.forEach((c) => c !== card && parar(c));
       const iframe = document.createElement('iframe');
       iframe.src = `https://www.youtube-nocookie.com/embed/${card.dataset.id}?rel=0&autoplay=1`;
       iframe.title = card.dataset.titulo ?? 'Vídeo del Rancho de Ánimas';
       iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
       iframe.allowFullscreen = true;
-      frame.replaceChildren(iframe);
+      card.querySelector('.video-frame')!.replaceChildren(iframe);
       iframe.focus();
     });
   });
 </script>
 
 <style>
+  .rancho-historia { max-width: 46rem; margin-inline: auto; }
   .rancho-videos { margin-top: var(--space-12); }
   .rancho-videos h2 { margin-bottom: var(--space-4); }
   .video-grid { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr)); }
