@@ -1,0 +1,27 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>C · Parrilla + ventana (diálogo) con anterior/siguiente</title><link rel="stylesheet" href="base.css"><style>
+
+.c { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); }
+.tile { display: block; width: 100%; text-align: left; padding: 0; background: var(--color-card); border: 1px solid var(--color-border); border-radius: var(--radius); overflow: hidden; cursor: pointer; box-shadow: var(--shadow); }
+.tile .cap { display: block; padding: var(--space-3); font-size: .9rem; font-weight: 600; line-height: 1.35; }
+dialog { width: min(100% - 1rem, 62rem); padding: 0; border: 0; border-radius: var(--radius); background: #14090a; color: #fff; }
+dialog::backdrop { background: rgb(20 9 10 / .8); }
+.dlg-top { display: flex; justify-content: space-between; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); }
+.dlg-top h2 { margin: 0; font-size: 1rem; color: #fff; } .dlg-nav { display: flex; gap: var(--space-2); padding: var(--space-3) var(--space-4); justify-content: space-between; }
+.btn { min-height: 48px; min-width: 48px; padding: 0 var(--space-4); border-radius: 999px; border: 1.5px solid #fff; background: none; color: #fff; cursor: pointer; font-weight: 600; }
+.btn:hover { background: #fff; color: #14090a; }
+
+</style></head><body>
+<div class="proto-bar"><span>C · Parrilla + ventana (diálogo) con anterior/siguiente</span><a href="index.html">← Todos los prototipos</a></div>
+<div class="container section">
+<h1 style="font-size:clamp(1.6rem,1rem+2vw,2.2rem)">Vídeos del Rancho de Ánimas</h1>
+<div class="c" id="g"></div><dialog id="d" aria-label="Reproductor de vídeo"><div class="dlg-top"><h2 id="dt"></h2><button class="btn" id="x" type="button" aria-label="Cerrar">✕</button></div><div class="ratio" id="dp"></div><div class="dlg-nav"><button class="btn" id="prev" type="button">← Anterior</button><button class="btn" id="next" type="button">Siguiente →</button></div></dialog>
+</div>
+<script src="datos.js"></script><script>
+
+const g = document.getElementById("g"), d = document.getElementById("d"); let cur = 0;
+function abrir(i) { cur = (i + VIDEOS.length) % VIDEOS.length; const v = VIDEOS[cur]; document.getElementById("dt").textContent = corto(v.t); document.getElementById("dp").innerHTML = `<iframe src="${embed(v.id, true)}" title="${v.t}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`; if (!d.open) d.showModal(); }
+VIDEOS.forEach((v, i) => { const b = document.createElement("button"); b.className = "tile"; b.type = "button"; b.innerHTML = `<span class="ratio" style="display:block"><img src="${thumb(v.id)}" alt="" loading="lazy"><span class="play"></span></span><span class="cap">${corto(v.t)}</span>`; b.onclick = () => abrir(i); g.append(b); });
+document.getElementById("x").onclick = () => d.close(); document.getElementById("prev").onclick = () => abrir(cur - 1); document.getElementById("next").onclick = () => abrir(cur + 1);
+d.addEventListener("close", () => document.getElementById("dp").innerHTML = ""); d.addEventListener("click", (e) => { if (e.target === d) d.close(); });
+</script></body></html>

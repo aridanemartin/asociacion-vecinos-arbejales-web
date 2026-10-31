@@ -1,0 +1,26 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>D · Por épocas (archivo histórico / recientes) con filtro</title><link rel="stylesheet" href="base.css"><style>
+
+.chips { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-bottom: var(--space-6); }
+.chip { min-height: 44px; padding: 0 var(--space-4); border-radius: 999px; border: 1.5px solid var(--color-primary); background: none; color: var(--color-primary); font-weight: 600; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--color-primary); color: #fff; }
+.epoca { margin-bottom: var(--space-8); } .epoca h2 { display: flex; align-items: baseline; gap: var(--space-3); border-bottom: 2px solid var(--color-border); padding-bottom: var(--space-2); }
+.epoca h2 small { font: 500 .85rem var(--font-body); color: var(--color-muted-foreground); }
+.fila { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr)); }
+.fila figure { margin: 0; } .fila figcaption { padding: var(--space-3); font-size: .92rem; font-weight: 600; } .facade { padding: 0; border: 0; width: 100%; cursor: pointer; display: block; }
+
+</style></head><body>
+<div class="proto-bar"><span>D · Por épocas (archivo histórico / recientes) con filtro</span><a href="index.html">← Todos los prototipos</a></div>
+<div class="container section">
+<h1 style="font-size:clamp(1.6rem,1rem+2vw,2.2rem)">Vídeos del Rancho de Ánimas</h1>
+<div class="chips" role="group" aria-label="Filtrar por época" id="c"></div><div id="e"></div>
+</div>
+<script src="datos.js"></script><script>
+
+const epocas = [["Archivo histórico", "Grabaciones de 1968 a 1982", (v) => v.anio < 2000], ["Recientes", "Actuaciones de los últimos años", (v) => v.anio >= 2000]];
+let filtro = "todas"; const c = document.getElementById("c"), e = document.getElementById("e");
+function pintar() { e.innerHTML = ""; epocas.forEach(([n, s, f]) => { if (filtro !== "todas" && filtro !== n) return; const vs = VIDEOS.filter(f); if (!vs.length) return; const sec = document.createElement("section"); sec.className = "epoca"; sec.innerHTML = `<h2>${n} <small>${s}</small></h2><div class="fila"></div>`; vs.forEach((v) => { const fg = document.createElement("figure"); fg.className = "card"; fg.innerHTML = `<div class="ratio"><button class="facade ratio" type="button" aria-label="Reproducir: ${v.t}"><img src="${thumb(v.id)}" alt="" loading="lazy"><span class="play"></span></button></div><figcaption>${corto(v.t)}</figcaption>`; fg.querySelector("button").onclick = () => fg.querySelector(".ratio").innerHTML = `<iframe src="${embed(v.id, true)}" title="${v.t}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`; sec.querySelector(".fila").append(fg); }); e.append(sec); });
+  [...c.children].forEach((b) => b.setAttribute("aria-pressed", b.dataset.k === filtro)); }
+["todas", ...epocas.map((x) => x[0])].forEach((k) => { const b = document.createElement("button"); b.className = "chip"; b.type = "button"; b.dataset.k = k; b.textContent = k === "todas" ? "Todos" : k; b.onclick = () => { filtro = k; pintar(); }; c.append(b); });
+pintar();
+</script></body></html>
