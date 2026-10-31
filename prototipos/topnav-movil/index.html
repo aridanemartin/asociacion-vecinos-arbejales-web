@@ -1,0 +1,70 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prototipos · Topnav móvil</title>
+<style>
+@import url('../../src/styles/global.css');
+body{display:block;background:#e9dfcf;padding:24px}
+h1.t{font-size:1.5rem;margin:0 0 4px}.hint{margin:0 0 20px;color:#5b4a42}
+.wall{display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start}
+figure.cell{margin:0;width:390px}
+.cap{margin:10px 2px 0;font-size:.85rem;line-height:1.4;color:#3a1a15}.cap b{display:block;font-size:.95rem}
+.phone{position:relative;width:390px;height:640px;background:var(--color-background);border:10px solid #2a1512;border-radius:34px;overflow:hidden;box-shadow:0 8px 24px rgb(0 0 0/.25)}
+.page{position:absolute;inset:0;overflow:hidden}
+.bar{display:flex;justify-content:space-between;align-items:center;padding:9px 16px;background:var(--color-background);border-bottom:1px solid var(--color-border);height:73px}
+.bar img.l{height:54px;width:auto}
+.ph{background:var(--color-muted);padding:22px 16px;border-bottom:1px solid var(--color-border)}.ph h1{font-size:1.7rem;margin:0 0 4px}.ph p{margin:0;font-size:.95rem;color:var(--color-muted-foreground)}
+.fake{padding:16px}.fake i{display:block;height:10px;background:var(--color-muted);border-radius:5px;margin-bottom:9px}.fake .c{height:90px;background:#fff;border:1px solid var(--color-border);border-radius:12px;margin-bottom:12px}
+.burger{display:grid;gap:6px;width:32px;background:none;border:0;padding:0;cursor:pointer;min-height:44px;align-content:center}.burger i{display:block;height:3px;background:var(--color-primary);border-radius:2px;transition:.2s}
+.open .burger i:nth-child(1){transform:translateY(9px) rotate(45deg)}.open .burger i:nth-child(2){opacity:0}.open .burger i:nth-child(3){transform:translateY(-9px) rotate(-45deg)}
+.menu{position:absolute;z-index:5;transition:.28s var(--ease)}
+.menu a{display:block;text-decoration:none;color:inherit;font-weight:600}
+.hintbtn{position:absolute;right:8px;bottom:8px;z-index:9;font:600 .7rem var(--font-body);background:#2a1512;color:#fff;padding:3px 8px;border-radius:99px;opacity:.8;pointer-events:none}
+
+/* A · Actual: pantalla completa roja */
+.A .menu{inset:73px 0 0 0;background:var(--color-primary);color:#fff;padding:24px 16px;opacity:0;visibility:hidden;display:flex;flex-direction:column;justify-content:center}
+.A.open .menu{opacity:1;visibility:visible}.A .menu a{padding:11px 0;font-size:1.25rem;font-family:var(--font-display)}
+/* B · Botón "Menú" + hoja desplegable en rejilla */
+.B .pill{display:flex;align-items:center;gap:8px;min-height:44px;padding:0 16px 0 12px;border-radius:999px;border:1.5px solid var(--color-primary);background:none;color:var(--color-primary);font-weight:700;cursor:pointer}
+.B .menu{left:10px;right:10px;top:80px;background:#fff;border:1px solid var(--color-border);border-radius:16px;box-shadow:0 12px 30px rgb(58 26 21/.25);padding:10px;display:grid;grid-template-columns:1fr 1fr;gap:6px;opacity:0;transform:translateY(-8px);visibility:hidden}
+.B.open .menu{opacity:1;transform:none;visibility:visible}.B .menu a{padding:12px;border-radius:10px;background:var(--color-muted);font-size:.92rem;min-height:48px;display:flex;align-items:center}.B .menu a:first-child{grid-column:1/-1;background:var(--color-primary);color:#fff}
+/* C · Título de la sección + panel lateral */
+.C .bar .mid{flex:1;margin:0 12px;font:600 1.05rem var(--font-display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.C .bar img.l{height:46px}
+.C .scrim{position:absolute;inset:0;background:rgb(20 9 10/.5);opacity:0;visibility:hidden;transition:.25s;z-index:4}.C.open .scrim{opacity:1;visibility:visible}
+.C .menu{visibility:hidden;top:0;bottom:0;right:0;width:78%;background:var(--color-background);transform:translateX(100%);padding:20px 8px;box-shadow:-8px 0 24px rgb(0 0 0/.25)}.C.open .menu{transform:none;visibility:visible}
+.C .menu a{padding:13px 14px;border-radius:10px;font-size:1.02rem;border-left:4px solid transparent}.C .menu a.cur{background:var(--color-muted);border-left-color:var(--color-primary);color:var(--color-primary)}.C .menu .x{display:block;margin:0 14px 10px auto;background:none;border:0;font-size:1.6rem;color:var(--color-primary);cursor:pointer}
+/* D · Barra inferior de pestañas */
+.D .bar{justify-content:flex-start;gap:12px}.D .bar .nm{font:600 1rem/1.2 var(--font-display)}.D .bar .nm small{display:block;font:500 .75rem var(--font-body);color:var(--color-muted-foreground)}
+.D .tabs{position:absolute;left:0;right:0;bottom:0;z-index:6;background:#fff;border-top:1px solid var(--color-border);display:grid;grid-template-columns:repeat(5,1fr);padding:6px 4px 10px}
+.D .tabs button{background:none;border:0;display:grid;justify-items:center;gap:2px;font:600 .72rem var(--font-body);color:var(--color-muted-foreground);min-height:52px;cursor:pointer}.D .tabs button.cur{color:var(--color-primary)}.D .tabs svg{width:22px;height:22px}
+.D .menu{left:0;right:0;bottom:0;background:#fff;border-radius:18px 18px 0 0;padding:14px 12px 78px;box-shadow:0 -10px 30px rgb(0 0 0/.25);transform:translateY(100%);z-index:5}.D.open .menu{transform:none}.D .menu a{padding:13px 12px;border-bottom:1px solid var(--color-border)}
+/* E · Pastillas deslizables fijas */
+.E .chips{display:flex;gap:8px;overflow-x:auto;padding:10px 16px;background:var(--color-background);border-bottom:1px solid var(--color-border);scrollbar-width:none}.E .chips a{flex:none;min-height:40px;display:flex;align-items:center;padding:0 14px;border-radius:999px;border:1.5px solid var(--color-border);background:#fff;text-decoration:none;color:var(--color-foreground);font-weight:600;font-size:.9rem}.E .chips a.cur{background:var(--color-primary);border-color:var(--color-primary);color:#fff}
+.E .bar{border-bottom:0;height:64px}.E .bar img.l{height:46px}.E .bar .nm{font:600 1rem var(--font-display)}
+/* F · Barra roja */
+.F .bar{background:var(--color-primary);border-bottom:0}.F .bar .lg{height:46px;width:auto;filter:brightness(0) invert(1)}.F .burger i{background:#fff}
+.F .menu{left:0;right:0;top:73px;background:#3a1a15;color:#fff;padding:8px 16px 16px;max-height:0;overflow:hidden;padding-block:0;opacity:0}.F.open .menu{max-height:560px;opacity:1;padding-block:8px 16px}.F .menu a{padding:13px 0;border-bottom:1px solid rgb(255 255 255/.15)}
+/* G · Logo centrado, menú a la izquierda, atajo a la derecha */
+.G .bar{display:grid;grid-template-columns:44px 1fr 44px;align-items:center}.G .bar .l{margin:0 auto}.G .tel{width:44px;height:44px;border-radius:50%;background:var(--color-muted);display:grid;place-items:center;color:var(--color-primary);text-decoration:none;justify-self:end}
+.G .menu{inset:73px 0 0 0;background:var(--color-background);padding:16px;display:grid;gap:8px;align-content:start;transform:translateX(-100%)}.G.open .menu{transform:none}.G .menu a{background:#fff;border:1px solid var(--color-border);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow)}
+</style></head><body>
+<h1 class="t">Topnav móvil · prototipos</h1>
+<p class="hint">Cada teléfono es interactivo: pulsa el botón de menú (o «Más» en D). Datos reales: las secciones del sitio. Página de ejemplo: «Iglesia y cementerio».</p>
+<div class="wall" id="wall"></div>
+<script>
+const NAV=['Inicio','Historia de Arbejales','Rancho de Ánimas','Nuestras fiestas','Iglesia y cementerio','Documentos de la asociación','Disponibilidad del local','Sugerencias','Contactos'];
+const CUR=4, LOGO='../../public/img/logo-simbolo.png', LOGOW='../../public/img/logo-completo-texto-blanco.webp';
+const links=(cls=true)=>NAV.map((n,i)=>`<a href="#" class="${i===CUR?'cur':''}">${n}</a>`).join('');
+const body=`<div class="ph"><h1>Iglesia y cementerio</h1><p>Horarios y fotografías de la iglesia.</p></div><div class="fake"><div class="c"></div><i></i><i style="width:80%"></i><div class="c"></div></div>`;
+const burger=`<button class="burger" type="button" aria-label="Menú" data-t><i></i><i></i><i></i></button>`;
+const icon=(d)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+const V=[
+['A','A · Actual: pantalla completa roja','Lo que hay hoy. Inmersivo pero tapa la página y cuesta volver.',()=>`<div class="bar"><img class="l" src="${LOGO}" alt="">${burger}</div>${body}<nav class="menu">${links()}</nav>`],
+['B','B · Botón «Menú» con texto + hoja en rejilla','Una palabra es más clara que tres rayas. Hoja flotante en 2 columnas: se ve más de un vistazo.',()=>`<div class="bar"><img class="l" src="${LOGO}" alt=""><button class="pill" type="button" data-t><span>☰</span>Menú</button></div>${body}<nav class="menu">${links()}</nav>`],
+['C','C · Título de la sección + panel lateral','Sabes siempre dónde estás. El panel deja ver la página detrás y marca la sección actual.',()=>`<div class="bar"><img class="l" src="${LOGO}" alt=""><span class="mid">Iglesia y cementerio</span>${burger}</div>${body}<div class="scrim" data-t></div><nav class="menu"><button class="x" data-t type="button" aria-label="Cerrar">✕</button>${links()}</nav>`],
+['D','D · Barra inferior de pestañas + «Más»','Patrón de app: lo principal al alcance del pulgar. «Más» abre el resto.',()=>`<div class="bar"><img class="l" src="${LOGO}" alt=""><span class="nm">Llano Roque<small>Arbejales, Teror</small></span></div>${body}<nav class="menu">${NAV.slice(4).map(n=>`<a href="#">${n}</a>`).join('')}</nav><div class="tabs"><button>${icon('<path d="M3 11l9-8 9 8v10H3z"/>')}Inicio</button><button>${icon('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>')}Historia</button><button>${icon('<path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/>')}Rancho</button><button>${icon('<path d="M5 3l14 9-14 9z"/>')}Fiestas</button><button data-t class="more">${icon('<circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>')}Más</button></div>`],
+['E','E · Pastillas deslizables, sin menú','Todo visible a un deslizamiento, sin abrir nada. Una sola mano.',()=>`<div class="bar"><img class="l" src="${LOGO}" alt=""><span class="nm">Llano Roque · Arbejales</span><span></span></div><div class="chips">${links()}</div>${body}`],
+['F','F · Barra roja + desplegable oscuro','Mucha marca de color: barra roja con logo en blanco y menú que cae como cortina.',()=>`<div class="bar"><img class="lg" src="${LOGOW}" alt="" style="filter:none;height:50px">${burger}</div>${body}<nav class="menu">${links()}</nav>`],
+['G','G · Logo centrado + atajo','Menú a la izquierda, logo al centro y un atajo (teléfonos) a la derecha. Lista de tarjetas.',()=>`<div class="bar">${burger}<img class="l" src="${LOGO}" alt=""><a class="tel" href="#" aria-label="Contactos">${icon('<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/>')}</a></div>${body}<nav class="menu">${links()}</nav>`],
+];
+document.getElementById('wall').innerHTML=V.map(([k,t,d,f])=>`<figure class="cell"><div class="phone"><div class="page ${k}" data-k="${k}">${f()}</div></div><figcaption class="cap"><b>${t}</b>${d}</figcaption></figure>`).join('');
+document.querySelectorAll('.page').forEach(p=>p.addEventListener('click',e=>{if(e.target.closest('[data-t]'))p.classList.toggle('open')}));
+</script></body></html>
