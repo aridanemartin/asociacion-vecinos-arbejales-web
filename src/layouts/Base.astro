@@ -29,22 +29,22 @@ const current = (href: string) => path === href || path.startsWith(href + '/');
         <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu-principal" aria-label="Abrir menú">
           <span></span><span></span><span></span>
         </button>
+        <nav class="main-nav" id="menu-principal" aria-label="Secciones" data-open="false">
+          <div class="container">
+            <ul>
+              {nav.map((n, i) => (
+                <li style={`--i:${i}`}>
+                  <a href={n.href} aria-current={current(n.href) ? 'page' : undefined}>
+                    <span class="nav-short">{n.short}</span>
+                    <span class="nav-long">{n.label}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </nav>
       </div>
     </header>
-    <nav class="main-nav" id="menu-principal" aria-label="Secciones" data-open="false">
-      <div class="container">
-        <ul>
-          {nav.map((n, i) => (
-            <li style={`--i:${i}`}>
-              <a href={n.href} aria-current={current(n.href) ? 'page' : undefined}>
-                <span class="nav-short">{n.short}</span>
-                <span class="nav-long">{n.label}</span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </nav>
     <main id="contenido" tabindex="-1">
       <slot />
     </main>

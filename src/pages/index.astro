@@ -7,6 +7,20 @@ const novedades = await getNovedades();
 const fmt = new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 ---
 <Base>
+  <section class="hero" aria-label="Arbejales, Teror">
+    <img
+      class="hero-bg"
+      src="/img/hero-fuegos.webp"
+      alt="Fuegos artificiales sobre la iglesia de Arbejales durante las fiestas, de noche"
+      width="2000"
+      height="1259"
+      fetchpriority="high"
+    />
+    <div class="hero-logo">
+      <img src="/img/logo-completo-texto-blanco.webp" alt="Arbejales, un pueblo con corazón" width="1000" height="833" />
+    </div>
+  </section>
+
   <section class="section" aria-labelledby="asociacion-titulo">
     <div class="container">
       <div class="two-col intro-asociacion">
@@ -101,6 +115,38 @@ const fmt = new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'long', ye
 </Base>
 
 <style>
+  .hero {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: clamp(380px, 62vh, 620px);
+    padding: var(--space-8) var(--space-4);
+    overflow: hidden;
+    background: var(--color-foreground);
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 50%;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgb(0 0 0 / 0.5);
+  }
+  .hero-logo {
+    position: relative;
+    z-index: 1;
+  }
+  .hero-logo img {
+    display: block;
+    width: clamp(180px, 30vw, 320px);
+    height: auto;
+  }
   .intro-foto {
     margin: 0;
     border-radius: var(--radius);
