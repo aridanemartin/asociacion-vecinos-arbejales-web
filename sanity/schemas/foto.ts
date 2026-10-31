@@ -46,12 +46,13 @@ export const foto = defineType({
 })
 
 // Lista de fotos que se puede añadir a cualquier página.
-export const fotosField = (description: string, title = 'Fotos') =>
+export const fotosField = (description: string, title = 'Fotos', max?: number) =>
   defineField({
     name: 'fotos',
     title,
     type: 'array',
     of: [{type: 'foto'}],
     components: {input: ImagesFieldWarning},
-    description: `${description} Pulse «Añadir elemento» para cada foto nueva. Para quitar una foto, pulse los tres puntos que hay a su derecha y elija «Eliminar».`,
+    validation: (r) => (max ? r.max(max).error(`Solo se pueden subir ${max} fotos. Elimine alguna para poder publicar.`) : r),
+    description: `${description}${max ? ` Máximo ${max} fotos.` : ''} Pulse «Añadir elemento» para cada foto nueva. Para quitar una foto, pulse los tres puntos que hay a su derecha y elija «Eliminar».`,
   })

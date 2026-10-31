@@ -24,16 +24,14 @@ const anios = (await getFiestasAnios()).filter((a) => a.fotos.length > 0);
         <p class="empty">Pronto publicaremos aquí las fotos de las fiestas de otros años.</p>
       ) : (
         <>
-          <nav aria-label="Años con fotos">
-            <ul class="year-list">
-              {anios.map((a) => (
-                <li><a class="year-link" href={`#fiestas-${a.anio}`}>{a.anio}</a></li>
-              ))}
-            </ul>
-          </nav>
+          <div class="year-tabs" role="tablist" aria-label="Año de las fotos" hidden>
+            {anios.map((a, i) => (
+              <button class="year-link" type="button" role="tab" id={`tab-${a.anio}`} aria-controls={`fiestas-${a.anio}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>{a.anio}</button>
+            ))}
+          </div>
           {anios.map((a) => (
-            <section class="year-block" aria-labelledby={`fiestas-${a.anio}`}>
-              <h3 id={`fiestas-${a.anio}`}>Fiestas de {a.anio}</h3>
+            <section class="year-block" id={`fiestas-${a.anio}`} role="tabpanel" aria-labelledby={`tab-${a.anio}`}>
+              <h3>Fiestas de {a.anio}</h3>
               <Gallery fotos={a.fotos} />
             </section>
           ))}
@@ -43,11 +41,46 @@ const anios = (await getFiestasAnios()).filter((a) => a.fotos.length > 0);
   </div>
 </Base>
 
+<script>
+  // Muestra las fotos de un solo año; sin JavaScript se ven todos los años seguidos.
+  const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('.year-tabs [role="tab"]'));
+  const lista = document.querySelector<HTMLElement>('.year-tabs');
+  if (lista && tabs.length) {
+    lista.hidden = false;
+    const mostrar = (tab: HTMLButtonElement, foco = false) => {
+      for (const t of tabs) {
+        const activo = t === tab;
+        t.setAttribute('aria-selected', String(activo));
+        t.tabIndex = activo ? 0 : -1;
+        const panel = document.getElementById(t.getAttribute('aria-controls')!);
+        if (panel) panel.hidden = !activo;
+      }
+      if (foco) tab.focus();
+    };
+    tabs.forEach((t) => t.addEventListener('click', () => mostrar(t)));
+    lista.addEventListener('keydown', (e) => {
+      const i = tabs.findIndex((t) => t.getAttribute('aria-selected') === 'true');
+      const paso = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+      if (e.key === 'Home' || e.key === 'End') {
+        e.preventDefault();
+        mostrar(tabs[e.key === 'Home' ? 0 : tabs.length - 1], true);
+      } else if (paso) {
+        e.preventDefault();
+        mostrar(tabs[(i + paso + tabs.length) % tabs.length], true);
+      }
+    });
+    const desdeEnlace = tabs.find((t) => `#${t.getAttribute('aria-controls')}` === location.hash);
+    mostrar(desdeEnlace ?? tabs[0]);
+  }
+</script>
+
 <style>
   .fiestas-fotos { margin-top: var(--space-12); }
-  .year-list { list-style: none; margin: var(--space-4) 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
-  .year-link { display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--space-4); border-radius: 999px; border: 1.5px solid var(--color-primary); color: var(--color-primary); font-weight: 600; text-decoration: none; }
+  .year-tabs { margin-top: var(--space-4); display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .year-link { display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--space-4); border-radius: 999px; border: 1.5px solid var(--color-primary); color: var(--color-primary); font-weight: 600; background: none; font-size: inherit; cursor: pointer; }
+  .year-link[aria-selected='true'] { background: var(--color-primary); color: var(--color-on-accent); }
   .year-link:hover { background: var(--color-primary); color: var(--color-on-accent); }
   .year-block { margin-top: var(--space-8); scroll-margin-top: var(--space-6); }
-  .year-block h3 { margin-bottom: var(--space-4); scroll-margin-top: var(--space-6); }
+  .year-block h3 { margin-bottom: var(--space-4); }
+  .year-block[hidden], .year-tabs[hidden] { display: none; }
 </style>

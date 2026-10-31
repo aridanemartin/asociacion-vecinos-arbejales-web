@@ -144,7 +144,7 @@ export const fiestaAnio = defineType({
       description: 'Escriba el año con cuatro cifras. Por ejemplo: 2025. Solo puede haber un documento por año.',
       validation: (r) => r.required().integer().min(1900).max(2100).error('Escriba un año con cuatro cifras. Por ejemplo: 2025.'),
     }),
-    fotosField('Añada aquí las fotos de las fiestas de ese año.', 'Fotos de las fiestas'),
+    fotosField('Añada aquí las fotos de las fiestas de ese año.', 'Fotos de las fiestas', 20),
   ],
   orderings: [{title: 'Más recientes primero', name: 'anioDesc', by: [{field: 'anio', direction: 'desc'}]}],
   preview: {select: {title: 'anio'}, prepare: ({title}) => ({title: title ? `Fiestas de ${title}` : 'Fiestas (sin año)'})},

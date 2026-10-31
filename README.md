@@ -61,5 +61,5 @@ la web muestra ese contenido.
 Para publicar con contenido real, define `PUBLIC_SANITY_MOCK=false` en el entorno de
 despliegue.
 
-Las imágenes de ejemplo son SVG en `public/img/mock/` (`npm run mock:images`) y los PDF
-en `public/docs/` (`npm run mock:docs`, solo macOS).
+Los datos de ejemplo no llevan fotos. Los PDF de ejemplo están en `public/docs/`
+(`npm run mock:docs`, solo macOS).

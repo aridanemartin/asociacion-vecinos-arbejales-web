@@ -9,7 +9,6 @@
     "preview": "astro preview",
     "check": "astro check",
     "seed": "node scripts/seed-sanity.mjs",
-    "mock:images": "node scripts/mock-images.mjs",
     "mock:docs": "sh scripts/mock-docs.sh"
   },
   "dependencies": {

@@ -24,7 +24,7 @@ const current = (href: string) => path === href || path.startsWith(href + '/');
     <header class="site-header">
       <div class="container header-row">
         <a class="brand" href="/">
-          <img src="/img/logo-completo.webp" alt={`${site.place}, un pueblo con corazón · ${site.name} (ir al inicio)`} width="1000" height="833" />
+          <img src="/img/logo-simbolo.png" alt={`${site.name}: ir al inicio`} width="256" height="256" />
         </a>
         <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu-principal" aria-label="Abrir menú">
           <span></span><span></span><span></span>
@@ -32,8 +32,14 @@ const current = (href: string) => path === href || path.startsWith(href + '/');
         <nav class="main-nav" id="menu-principal" aria-label="Secciones" data-open="false">
           <div class="container">
             <ul>
+              <li style="--i:0">
+                <a href="/" aria-current={Astro.url.pathname === '/' ? 'page' : undefined}>
+                  <span class="nav-short">Inicio</span>
+                  <span class="nav-long">Inicio</span>
+                </a>
+              </li>
               {nav.map((n, i) => (
-                <li style={`--i:${i}`}>
+                <li style={`--i:${i + 1}`}>
                   <a href={n.href} aria-current={current(n.href) ? 'page' : undefined}>
                     <span class="nav-short">{n.short}</span>
                     <span class="nav-long">{n.label}</span>

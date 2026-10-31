@@ -5,15 +5,13 @@
 // Para forzarlos:      PUBLIC_SANITY_MOCK=true
 // Para desactivarlos:  PUBLIC_SANITY_MOCK=false
 //
-// Las fotos y los PDF viven en public/img/mock y public/docs. Se generan con
-// `node scripts/mock-images.mjs` y `sh scripts/mock-docs.sh`.
+// Los datos de ejemplo no llevan fotos. Los PDF viven en public/docs
+// (se generan con `sh scripts/mock-docs.sh`).
 import type {
-  BloqueFoto,
   BloqueTexto,
   DiaOcupado,
   FiestaAnio,
   Fiestas,
-  Foto,
   Historia,
   Iglesia,
   Novedad,
@@ -22,20 +20,11 @@ import type {
   Video,
 } from '../lib/types';
 
-const foto = (slug: string, alt: string): Foto => ({ url: `/img/mock/${slug}.webp`, alt });
-
 /** Párrafo de texto enriquecido para la historia. */
 const parrafo = (clave: string, texto: string): BloqueTexto => ({
   _type: 'block',
   _key: clave,
   children: [{ _type: 'span', _key: `${clave}-texto`, text: texto, marks: [] }],
-});
-
-/** Foto intercalada entre párrafos. */
-const fotoBloque = (clave: string, slug: string, alt: string): BloqueFoto => ({
-  _type: 'foto',
-  _key: clave,
-  ...foto(slug, alt),
 });
 
 /** Fecha (AAAA-MM-DD) a partir de hoy, en UTC, para que el calendario tenga días próximos. */
@@ -98,28 +87,22 @@ export const mockHistoria: Historia = {
       'hist-p1',
       'Arbejales es un pago del municipio de Teror, en el norte de Gran Canaria, situado entre laderas de castaños y tierras de cultivo que miran hacia el barranco. Su nombre aparece en documentos antiguos y su paisaje conserva todavía la huella de una vida ligada al agua, al camino y a la tierra.',
     ),
-    fotoBloque('hist-f1', 'plaza', 'Plaza del barrio con la iglesia al fondo'),
     parrafo(
       'hist-p2',
       'Durante generaciones, las familias del barrio se organizaron en torno a la iglesia, al lavadero y a las eras compartidas. Muchas de las casas que hoy vemos levantadas con piedra y barro se construyeron con las manos de los propios vecinos, que se ayudaban unos a otros en las tareas más pesadas.',
     ),
-    fotoBloque('hist-f2', 'paisaje', 'Vistas de las laderas y los castaños de Arbejales'),
     parrafo(
       'hist-p3',
       'La asociación de vecinos nació para dar voz a ese modo de hacer las cosas: cuidar el barrio entre todos, mantener las tradiciones y reclamar los servicios que hacen falta. Desde entonces ha organizado fiestas, romerías, talleres y reuniones, y ha acompañado a los vecinos en los momentos difíciles.',
     ),
-    fotoBloque('hist-f3', 'lavadero', 'Lavadero tradicional de piedra con agua corriente'),
     parrafo(
       'hist-p4',
       'Boni ha recopilado durante años fotografías, recuerdos y testimonios de las personas mayores del barrio. Ese trabajo es el origen de esta página: un lugar donde guardar la memoria de Arbejales y donde las nuevas generaciones puedan reconocerse en ella.',
     ),
-    fotoBloque('hist-f4', 'ermita', 'Ermita de Arbejales entre árboles'),
     parrafo(
       'hist-p5',
       'La historia del barrio sigue escribiéndose cada día, con las fiestas de cada año, con las obras que llegan y con la gente que decide quedarse y cuidar lo que hay. Si tienes fotos antiguas o recuerdos que contar, escríbenos: tu aportación ayuda a completar este relato.',
     ),
-    fotoBloque('hist-f5', 'memoria', 'Personas mayores del barrio hojeando fotos antiguas'),
-    fotoBloque('hist-f6', 'procesion', 'Procesión por la calle principal durante las fiestas'),
   ],
 };
 
@@ -129,22 +112,18 @@ export const mockRancho: Rancho = {
       'rancho-p1',
       'El Rancho de Ánimas de Arbejales es una de las tradiciones más queridas del barrio. Cada Navidad, un grupo de vecinos recorre las casas cantando coplas y villancicos al son de la guitarra, el timple y las panderetas, recordando a quienes ya no están y deseando un buen año a los que abren su puerta.',
     ),
-    fotoBloque('rancho-f1', 'rancho', 'Componentes del Rancho de Ánimas cantando en una casa del barrio'),
     parrafo(
       'rancho-p2',
       'La costumbre se ha transmitido de padres a hijos y ha cambiado poco con el tiempo: el mismo repertorio de coplas, la misma forma de llamar a la puerta y la misma ronda de aguinaldos. Los más pequeños participan cada vez más y aprenden las letras de memoria, sentados junto a los mayores.',
     ),
-    fotoBloque('rancho-f2', 'romeria', 'Romería de Arbejales con trajes tradicionales'),
     parrafo(
       'rancho-p3',
       'Al terminar la ronda, el barrio se reúne en el local social para compartir la cena que preparan entre todos. Es el momento en que se reparten los papeles del año siguiente y se recuerdan las anécdotas de las rondas pasadas.',
     ),
-    fotoBloque('rancho-f3', 'fiestas', 'Vecinos y vecinas cantando juntos durante las fiestas'),
     parrafo(
       'rancho-p4',
       'La asociación de vecinos colabora cada año en la organización del Rancho de Ánimas y mantiene viva la tradición con la ayuda de todos. Si quieres participar en la próxima ronda, acércate a las reuniones que celebramos en noviembre.',
     ),
-    fotoBloque('rancho-f4', 'vecinos', 'Grupo de vecinos reunidos después de la ronda de aguinaldos'),
   ],
 };
 
@@ -162,12 +141,10 @@ export const mockFiestas: Fiestas = {
       'fiestas-p1',
       'Las fiestas de Arbejales son el momento del año en que todo el barrio se reúne. Durante unos días, la plaza y la iglesia se llenan de vecinos, de familias que regresan para la ocasión y de visitantes que se acercan desde otros pagos de Teror.',
     ),
-    fotoBloque('fiestas-f1', 'fiestas', 'Vecinos disfrutando de las fiestas en la plaza del barrio'),
     parrafo(
       'fiestas-p2',
       'El programa incluye la misa y la procesión con la imagen por las calles del barrio, la romería con trajes tradicionales, juegos para los más pequeños y una comida compartida. La música y el baile ponen el punto final a cada jornada.',
     ),
-    fotoBloque('fiestas-f2', 'romeria', 'Romería con carretas y trajes tradicionales'),
     parrafo(
       'fiestas-p3',
       'Las fiestas se preparan entre todos: la directiva de la asociación coordina el programa y decenas de vecinos echan una mano con el montaje, la cocina y la limpieza. Cada año se publica el programa en la sección de noticias de la portada.',
@@ -175,43 +152,13 @@ export const mockFiestas: Fiestas = {
   ],
 };
 
-export const mockFiestasAnios: FiestaAnio[] = [
-  {
-    anio: 2025,
-    fotos: [
-      foto('procesion', 'Procesión por la calle principal en las fiestas de 2025'),
-      foto('romeria', 'Romería de las fiestas de 2025'),
-      foto('plaza', 'Plaza llena de vecinos durante las fiestas de 2025'),
-    ],
-  },
-  {
-    anio: 2024,
-    fotos: [
-      foto('fiestas', 'Vecinos en las fiestas de 2024'),
-      foto('rancho', 'Actuación del Rancho de Ánimas en las fiestas de 2024'),
-    ],
-  },
-  {
-    anio: 2023,
-    fotos: [
-      foto('vecinos', 'Vecinos preparando las fiestas de 2023'),
-      foto('iglesia', 'Iglesia engalanada en las fiestas de 2023'),
-      foto('paisaje', 'Vista del barrio durante las fiestas de 2023'),
-      foto('ermita', 'Ermita durante las fiestas de 2023'),
-    ],
-  },
-];
+export const mockFiestasAnios: FiestaAnio[] = [];
 
 export const mockIglesia: Iglesia = {
   horarioMisas: 'Sábados a las 19:00\nDomingos y festivos a las 11:00',
   horarioCementerio: 'De lunes a domingo, de 9:00 a 18:00\nEn verano, hasta las 19:00',
   horarioArchivo: 'Martes y jueves, de 10:00 a 12:00\nCita previa en la parroquia',
-  fotos: [
-    foto('iglesia', 'Fachada de la iglesia de Arbejales'),
-    foto('cementerio', 'Cementerio con muros de piedra blanca'),
-    foto('ermita', 'Ermita situada junto al cementerio'),
-    foto('procesion', 'Salida de la imagen durante la procesión de la fiesta'),
-  ],
+  fotos: [],
 };
 
 /** Días ocupados de ejemplo, siempre alrededor de la fecha de hoy. */
