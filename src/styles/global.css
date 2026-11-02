@@ -175,17 +175,17 @@ a:hover { color: var(--color-primary-hover); }
 .tile .more { margin-top: auto; padding-top: var(--space-2); display: inline-flex; align-items: center; gap: var(--space-2); font-weight: 600; color: var(--color-primary); }
 
 /* Subpáginas */
-.page-head { background: var(--color-card); border-bottom: 1px solid var(--color-border); padding-block: var(--space-8); }
+.page-head { background: var(--color-card); border-bottom: 1px solid var(--color-border); padding-block: var(--space-8); text-align: center; }
 .page-head h1 { margin: 0 0 var(--space-3); }
-.page-head p { color: var(--color-muted-foreground); margin: 0; font-size: 1.1rem; }
+.page-head p { color: var(--color-muted-foreground); margin: 0 auto; font-size: 1.1rem; max-width: 40rem; }
 /* El logo es solo una marca de agua de móvil: en escritorio la cabecera es únicamente texto. */
 .page-head-logo { display: none; }
 /* Móvil: el logo pasa a ser una marca de agua grande a la derecha del texto. */
 @media (max-width: 47.9375rem) {
-  .page-head { position: relative; overflow: hidden; background: var(--color-muted); }
+  .page-head { position: relative; overflow: hidden; background: var(--color-muted); text-align: left; }
   .page-head .container { position: relative; }
   .page-head-logo { display: block; position: absolute; right: -28px; top: 50%; width: 260px; transform: translateY(-50%); opacity: 0.10; pointer-events: none; }
-  .page-head h1, .page-head p { max-width: 78%; }
+  .page-head h1, .page-head p { max-width: 78%; margin-inline: 0; }
   .page-head h1 { margin-bottom: var(--space-2); }
 }
 .prose { max-width: 46rem; }
@@ -225,7 +225,7 @@ dl.schedule dd { margin: 0; color: var(--color-muted-foreground); }
 .file-list time { margin-left: auto; font-size: 0.9rem; color: var(--color-muted-foreground); }
 
 /* Formulario */
-.form { display: grid; gap: var(--space-6); max-width: 40rem; }
+.form { display: grid; gap: var(--space-6); max-width: 40rem; margin-inline: auto; }
 .field { display: grid; gap: var(--space-2); }
 .field label { font-weight: 600; }
 .field .hint { font-size: 0.9rem; color: var(--color-muted-foreground); }
@@ -253,19 +253,21 @@ dl.schedule dd { margin: 0; color: var(--color-muted-foreground); }
 .legend i.busy { background: repeating-linear-gradient(135deg, #f2c9c2 0 4px, #fbe4e0 4px 8px); }
 
 /* Pie */
-.site-footer { background: var(--color-foreground); color: #f3e4cf; margin-top: var(--space-16); padding-block: var(--space-8); }
+.site-footer { background: var(--color-foreground); color: #f3e4cf; padding-block: var(--space-8); }
 .site-footer a { color: #fff; }
-.funders { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4) var(--space-6); }
-.funders p { margin: 0; font-weight: 600; }
-.funders img { height: 56px; width: auto; border-radius: 8px; }
+.footer-colabora { background: #fff; }
+.colabora-fila { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--space-6); padding-block: var(--space-6); }
+.colabora-etq { font-weight: 600; color: var(--color-muted-foreground); font-size: 0.9rem; }
+.colabora-logos { display: flex; flex-wrap: nowrap; align-items: center; gap: clamp(var(--space-6), 5vw, var(--space-12)); }
+.colabora-logos img { height: clamp(22px, 5.5vw, 38px); width: auto; }
 .footer-social { margin-top: var(--space-6); }
 .footer-social a { display: inline-flex; align-items: center; gap: var(--space-2); min-height: 44px; font-weight: 600; }
-.footer-meta { margin-top: var(--space-6); font-size: 0.9rem; color: #d9bfa0; }
+.footer-meta { margin-top: var(--space-6); max-width: none; font-size: 0.9rem; color: #d9bfa0; }
 
 /* Banner de autoría: siempre al final de la página */
-.credit { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 0 0.3em; margin: 0; max-width: none; text-align: center; background: #fff; color: var(--color-primary); padding: var(--space-4); font-weight: 500; font-size: 0.85rem; }
-.credit a { color: var(--color-primary); font-weight: 700; transition: color 200ms var(--ease); }
-.credit a:hover { color: var(--color-primary-hover); }
+.credit { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 0 0.3em; margin: 0; max-width: none; text-align: center; background: var(--color-foreground); color: #f3e4cf; padding: var(--space-4); font-weight: 500; font-size: 0.85rem; }
+.credit a { color: #fff; font-weight: 700; transition: color 200ms var(--ease); }
+.credit a:hover { color: var(--color-muted); }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

@@ -1,0 +1,139 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prototipos · Pie de página (logos)</title>
+<style>
+@import url('../../src/styles/global.css');
+body{display:block;background:#e9dfcf}
+.intro{padding:var(--space-8) 0 var(--space-6)}
+.intro h1{font-size:clamp(1.5rem,1rem+1.6vw,2rem)}
+.intro .aviso{background:#fff3cd;border:1px solid #e6c766;color:#5b4a42;border-radius:var(--radius);padding:var(--space-4);font-size:.92rem;margin-top:var(--space-4)}
+.intro .aviso strong{display:block;margin-bottom:4px}
+.proto-bar{background:#2a1512;color:#fff;font:600 .85rem/1.3 var(--font-body);padding:14px 16px}
+.proto-bar .container{display:flex;flex-wrap:wrap;gap:4px 16px;align-items:baseline;justify-content:space-between}
+.proto-bar .letra{display:inline-block;background:var(--color-primary);color:#fff;border-radius:999px;width:22px;height:22px;line-height:22px;text-align:center;font-size:.75rem;margin-right:8px}
+.proto-bar p{margin:2px 0 0;font-weight:400;color:#e2cdb6;font-size:.82rem;max-width:60ch}
+
+/* texto legal + social reutilizado en todas */
+.social-dark{margin-top:var(--space-6)}
+.social-dark a{display:inline-flex;align-items:center;gap:var(--space-2);min-height:44px;font-weight:600;color:#fff;text-decoration:none}
+.meta-dark{margin-top:var(--space-6);font-size:.9rem;color:#d9bfa0}
+.social-claro{margin-top:var(--space-6)}
+.social-claro a{display:inline-flex;align-items:center;gap:var(--space-2);min-height:44px;font-weight:600;color:var(--color-primary);text-decoration:none}
+.meta-claro{margin-top:var(--space-6);font-size:.9rem;color:var(--color-muted-foreground)}
+
+/* ---------- A: pie entero en claro ---------- */
+.a-footer{background:var(--color-background);color:var(--color-foreground);border-top:1px solid var(--color-border);padding-block:var(--space-8)}
+.a-grupos{display:flex;flex-wrap:wrap;gap:var(--space-8) var(--space-12)}
+.a-grupo p{margin:0 0 var(--space-3);font-weight:700;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;color:var(--color-muted-foreground)}
+.a-fila{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-6)}
+.a-fila img{height:48px;width:auto}
+
+/* ---------- B: banda blanca + pie oscuro ---------- */
+.b-banda{background:#fff;border-bottom:1px solid var(--color-border);padding-block:var(--space-6)}
+.b-fila{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:var(--space-8)}
+.b-grupo{display:flex;align-items:center;gap:var(--space-4)}
+.b-grupo span.etq{font-weight:700;font-size:.85rem;color:var(--color-muted-foreground)}
+.b-fila img{height:52px;width:auto}
+.b-div{width:1px;align-self:stretch;background:var(--color-border)}
+.b-footer{background:var(--color-foreground);color:#f3e4cf;padding-block:var(--space-6)}
+
+/* ---------- C: fila única con separadores finos ---------- */
+.c-tira{background:#fff;border-bottom:1px solid var(--color-border)}
+.c-fila{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-5);padding-block:var(--space-4)}
+.c-fila .etq{font-size:.85rem;color:var(--color-muted-foreground);white-space:nowrap}
+.c-fila img{height:36px;width:auto}
+.c-sep{width:1px;height:28px;background:var(--color-border)}
+.c-footer{background:var(--color-foreground);color:#f3e4cf;padding-block:var(--space-6)}
+
+/* ---------- D: panel blanco flotante dentro del pie oscuro ---------- */
+.d-footer{background:var(--color-foreground);color:#f3e4cf;padding-block:var(--space-8)}
+.d-panel{background:#fff;border-radius:var(--radius);box-shadow:0 8px 24px rgb(0 0 0/.25);padding:var(--space-6) var(--space-8);margin-bottom:var(--space-6)}
+.d-panel p{margin:0 0 var(--space-4);font-weight:700;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;color:var(--color-muted-foreground);text-align:center}
+.d-fila{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:var(--space-8)}
+.d-fila img{height:52px;width:auto}
+</style></head><body>
+
+<div class="intro container">
+  <h1>Prototipos · Logos del pie de página</h1>
+  <p>Nueva ronda: sin tarjetas ni recuadros individuales por logo. Los logos van directamente sobre una superficie blanca o clara compartida — la diferencia de fondo la pone el propio bloque (banda, panel o pie entero), no una caja por icono.</p>
+  <div class="aviso">
+    <strong>Aviso sobre un fichero de origen</strong>
+    <code>ayuntamiento-teror.png</code> viene recortado por el propio archivo: el texto «Ayuntamiento de Teror» queda cortado en el borde derecho de la imagen. Ningún ajuste de CSS puede recuperar esos píxeles — hace falta sustituir el fichero por una versión completa (con margen) del logotipo.
+  </div>
+</div>
+
+<div class="proto-bar"><div class="container"><span><span class="letra">A</span>Pie entero en claro</span><p>Todo el pie pasa de marrón oscuro a un fondo crema claro (el mismo que el resto del sitio), con una línea fina arriba. Los logos quedan directamente sobre ese fondo, agrupados por «Financia» / «Colaboran» con una etiqueta pequeña encima de cada fila.</p></div></div>
+<footer class="a-footer">
+  <div class="container">
+    <div class="a-grupos">
+      <div class="a-grupo">
+        <p>Página financiada por</p>
+        <div class="a-fila"><img src="../../public/img/cabildo-gran-canaria.jpg" alt="Cabildo de Gran Canaria" loading="lazy"></div>
+      </div>
+      <div class="a-grupo">
+        <p>Colaboran</p>
+        <div class="a-fila">
+          <img src="../../public/img/cabildo-gran-canaria-colabora.jpg" alt="Cabildo de Gran Canaria" loading="lazy">
+          <img src="../../public/img/ayuntamiento-teror.png" alt="Ayuntamiento de Teror" loading="lazy">
+          <img src="../../public/img/teror-participa.png" alt="Teror Participa" loading="lazy">
+        </div>
+      </div>
+    </div>
+    <p class="social-claro"><a href="#">Síguenos en Facebook</a></p>
+    <p class="meta-claro">© 2026 Asociación de Vecinos Llano Roque · Arbejales</p>
+  </div>
+</footer>
+
+<div class="proto-bar"><div class="container"><span><span class="letra">B</span>Banda blanca + pie oscuro</span><p>Solo la franja de logos es blanca (fondo blanco puro, sin el pie oscuro alrededor); una línea vertical separa «Financia» de «Colaboran». El pie oscuro de debajo se queda solo con lo legal y el enlace social.</p></div></div>
+<div class="b-banda">
+  <div class="container b-fila">
+    <span class="b-grupo"><span class="etq">Financia</span><img src="../../public/img/cabildo-gran-canaria.jpg" alt="Cabildo de Gran Canaria" loading="lazy"></span>
+    <span class="b-div"></span>
+    <span class="b-grupo">
+      <span class="etq">Colaboran</span>
+      <img src="../../public/img/ayuntamiento-teror.png" alt="Ayuntamiento de Teror" loading="lazy">
+      <img src="../../public/img/teror-participa.png" alt="Teror Participa" loading="lazy">
+    </span>
+  </div>
+</div>
+<footer class="b-footer">
+  <div class="container">
+    <p class="social-dark"><a href="#">Síguenos en Facebook</a></p>
+    <p class="meta-dark">© 2026 Asociación de Vecinos Llano Roque · Arbejales</p>
+  </div>
+</footer>
+
+<div class="proto-bar"><div class="container"><span><span class="letra">C</span>Fila única con separadores finos</span><p>La más compacta de este bloque: una sola línea blanca con los tres logos del mismo tamaño, separados por una rayita vertical fina en vez de espacio vacío. El pie oscuro queda igual de ligero que en la B.</p></div></div>
+<div class="c-tira">
+  <div class="container c-fila">
+    <span class="etq">Con la colaboración de:</span>
+    <img src="../../public/img/cabildo-gran-canaria.jpg" alt="Cabildo de Gran Canaria" loading="lazy">
+    <span class="c-sep"></span>
+    <img src="../../public/img/ayuntamiento-teror.png" alt="Ayuntamiento de Teror" loading="lazy">
+    <span class="c-sep"></span>
+    <img src="../../public/img/teror-participa.png" alt="Teror Participa" loading="lazy">
+  </div>
+</div>
+<footer class="c-footer">
+  <div class="container">
+    <p class="social-dark"><a href="#">Síguenos en Facebook</a></p>
+    <p class="meta-dark">© 2026 Asociación de Vecinos Llano Roque · Arbejales</p>
+  </div>
+</footer>
+
+<div class="proto-bar"><div class="container"><span><span class="letra">D</span>Panel blanco flotante</span><p>Un único panel blanco con sombra, flotando dentro del pie oscuro, agrupa los tres logos juntos y grandes. Es una sola superficie compartida (no una caja por logo) con más presencia visual que las bandas finas de B y C.</p></div></div>
+<footer class="d-footer">
+  <div class="container">
+    <div class="d-panel">
+      <p>Financia el Cabildo de Gran Canaria · Colaboran el Ayuntamiento de Teror y Teror Participa</p>
+      <div class="d-fila">
+        <img src="../../public/img/cabildo-gran-canaria.jpg" alt="Cabildo de Gran Canaria" loading="lazy">
+        <img src="../../public/img/ayuntamiento-teror.png" alt="Ayuntamiento de Teror" loading="lazy">
+        <img src="../../public/img/teror-participa.png" alt="Teror Participa" loading="lazy">
+      </div>
+    </div>
+    <p class="social-dark"><a href="#">Síguenos en Facebook</a></p>
+    <p class="meta-dark">© 2026 Asociación de Vecinos Llano Roque · Arbejales</p>
+  </div>
+</footer>
+
+</body></html>
