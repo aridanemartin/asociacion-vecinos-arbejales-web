@@ -6,7 +6,7 @@ import { WebPInstructions } from './WebPInstructions'
 // iglesia y cementerio).
 export function ImagesFieldWarning(props: ArrayOfObjectsInputProps) {
   return (
-    <Stack space={4}>
+    <Stack gap={4}>
       <WebPInstructions />
       {props.renderDefault(props)}
     </Stack>

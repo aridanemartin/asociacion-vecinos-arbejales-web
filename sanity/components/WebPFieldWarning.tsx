@@ -7,7 +7,7 @@ import { WebPInstructions } from './WebPInstructions'
 // y el aviso justo debajo.
 export function WebPFieldWarning(props: ImageInputProps) {
   return (
-    <Stack space={4}>
+    <Stack gap={4}>
       <WebPInstructions />
       {props.renderDefault(props)}
     </Stack>

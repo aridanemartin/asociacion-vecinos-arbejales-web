@@ -12,7 +12,7 @@ const converterPages = [
 export function WebPInstructions() {
   return (
     <Card tone="caution" padding={[3, 4]} radius={2}>
-      <Stack space={3}>
+      <Stack gap={3}>
         <Text size={1} weight="semibold">
           ⚠️ Formato requerido: WebP
         </Text>
