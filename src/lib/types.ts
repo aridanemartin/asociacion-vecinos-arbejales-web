@@ -1,5 +1,4 @@
-// Tipos del contenido que la web lee del panel de Sanity.
-// Se comparten entre `lib/content.ts` (datos reales) y `data/mock.ts` (datos de ejemplo).
+// Types for the content the website reads from the Sanity Studio.
 
 export type Etiqueta = 'Noticia' | 'Evento' | 'Convocatoria';
 
@@ -16,7 +15,7 @@ export type Novedad = {
 
 export type Archivo = { titulo: string; url: string; fecha?: string; nombre: string };
 
-export type Carpeta = { slug: string; titulo: string; descripcion: string };
+export type Folder = { slug: string; title: string; description: string };
 
 export type Historia = { cuerpo: Bloque[] };
 
@@ -45,10 +44,16 @@ export type FiestaAnio = { anio: number; fotos: Foto[] };
 
 export type Video = { titulo: string; youtubeId: string };
 
+/** Quién atiende un horario y cómo contactar. */
+export type ContactoHorario = { responsable?: string; telefono?: string; email?: string };
+
 export type Iglesia = {
   horarioMisas?: string;
+  contactoMisas?: ContactoHorario;
   horarioCementerio?: string;
+  contactoCementerio?: ContactoHorario;
   horarioArchivo?: string;
+  contactoArchivo?: ContactoHorario;
   fotos: Foto[];
 };
 

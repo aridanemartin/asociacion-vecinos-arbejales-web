@@ -2,31 +2,31 @@
 import Base from '../layouts/Base.astro';
 import PageHead from '../components/PageHead.astro';
 import Icon from '../components/Icon.astro';
-import { getTelefonos } from '../lib/content';
-const contactos = await getTelefonos();
+import { getContacts } from '../lib/content';
+const contacts = await getContacts();
 const host = (url: string) => new URL(url).hostname.replace(/^www\./, '');
 ---
 <Base title="Contactos" description="Teléfonos y páginas web de servicios municipales de Teror.">
   <PageHead title="Contactos" intro="Teléfonos y webs de servicios del municipio de Teror." />
   <div class="container section">
     <ul class="file-list contactos">
-      {contactos.map((c) => (
+      {contacts.map((contact) => (
         <li class="card contacto">
           <div class="contacto-info">
-            <strong>{c.nombre}</strong>
-            {c.nota && <span class="nota">{c.nota}</span>}
+            <strong>{contact.nombre}</strong>
+            {contact.nota && <span class="nota">{contact.nota}</span>}
           </div>
           <div class="contacto-acciones">
-            {c.numero && (
-              <a class="accion" href={`tel:${c.numero.replace(/\s/g, '')}`}>
+            {contact.numero && (
+              <a class="accion" href={`tel:${contact.numero.replace(/\s/g, '')}`}>
                 <Icon name="phone" size={20} />
-                <span class="sr-only">Llamar a {c.nombre}: </span>{c.numero}
+                <span class="sr-only">Llamar a {contact.nombre}: </span>{contact.numero}
               </a>
             )}
-            {c.web && (
-              <a class="accion" href={c.web} target="_blank" rel="noopener noreferrer">
+            {contact.web && (
+              <a class="accion" href={contact.web} target="_blank" rel="noopener noreferrer">
                 <Icon name="external" size={20} />
-                <span class="sr-only">Página web de {c.nombre}: </span>{host(c.web)}
+                <span class="sr-only">Página web de {contact.nombre}: </span>{host(contact.web)}
                 <span class="sr-only">(se abre en una pestaña nueva)</span>
               </a>
             )}

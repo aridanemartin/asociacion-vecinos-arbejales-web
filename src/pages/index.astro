@@ -2,14 +2,14 @@
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
 import { nav } from '../data/site';
-import { getNovedades, imgUrl } from '../lib/content';
-const novedades = await getNovedades();
+import { getNews, imageUrl } from '../lib/content';
+const news = await getNews();
 // Sanity guarda el tamaño en el nombre del archivo (…-1000x1414.webp): se usa para reservar el hueco de la foto.
-const medidas = (url: string) => {
-  const m = url.match(/-(\d+)x(\d+)\.\w+$/);
-  return m ? { width: Number(m[1]), height: Number(m[2]) } : { width: 640, height: 400 };
+const getDimensions = (url: string) => {
+  const match = url.match(/-(\d+)x(\d+)\.\w+$/);
+  return match ? { width: Number(match[1]), height: Number(match[2]) } : { width: 640, height: 400 };
 };
-const fmt = new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+const dateFormatter = new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 ---
 <Base>
   <section class="hero" aria-label="Arbejales, Teror">
@@ -66,23 +66,23 @@ const fmt = new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'long', ye
           <button class="icon-btn" type="button" data-dir="1" aria-label="Siguientes"><Icon name="next" /></button>
         </div>
       </div>
-      {novedades.length === 0 && <p class="empty">Pronto publicaremos aquí las noticias, eventos y convocatorias de la asociación.</p>}
+      {news.length === 0 && <p class="empty">Pronto publicaremos aquí las noticias, eventos y convocatorias de la asociación.</p>}
       <ul class="carousel" id="carrusel" style="list-style:none;margin:0;padding:0 0 12px" tabindex="0" aria-label="Lista de noticias, eventos y convocatorias, desplazable">
-        {novedades.map((n) => (
+        {news.map((item) => (
           <li class="card news">
             <div class="news-media">
-              {n.foto ? (
-                <img src={imgUrl(n.foto, 800)} alt={n.foto.alt} loading="lazy" {...medidas(n.foto.url)} />
+              {item.foto ? (
+                <img src={imageUrl(item.foto, 800)} alt={item.foto.alt} loading="lazy" {...getDimensions(item.foto.url)} />
               ) : (
                 <img src="/img/arbejales-placeholder.webp" alt="" loading="lazy" width="640" height="427" />
               )}
             </div>
             <div class="news-body">
-              <span class="tag" data-kind={n.etiqueta}>{n.etiqueta}</span>
-              <h3>{n.enlace ? <a href={n.enlace}>{n.titulo}</a> : n.titulo}</h3>
-              <time datetime={n.fecha}>{fmt.format(new Date(n.fecha))}</time>
-              <p class="news-text">{n.resumen}</p>
-              <button class="news-more" type="button" hidden>Ver más<span class="sr-only">: {n.titulo}</span></button>
+              <span class="tag" data-kind={item.etiqueta}>{item.etiqueta}</span>
+              <h3>{item.enlace ? <a href={item.enlace}>{item.titulo}</a> : item.titulo}</h3>
+              <time datetime={item.fecha}>{dateFormatter.format(new Date(item.fecha))}</time>
+              <p class="news-text">{item.resumen}</p>
+              <button class="news-more" type="button" hidden>Ver más<span class="sr-only">: {item.titulo}</span></button>
             </div>
           </li>
         ))}

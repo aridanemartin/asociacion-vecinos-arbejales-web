@@ -2,18 +2,18 @@
 import Base from '../layouts/Base.astro';
 import PageHead from '../components/PageHead.astro';
 import Icon from '../components/Icon.astro';
-import { getOcupacion } from '../lib/content';
-const ocupacion = await getOcupacion();
-const fmt = new Intl.DateTimeFormat('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
-const hoy = new Date().toISOString().slice(0, 10);
-const proximas = ocupacion.filter((o) => o.fecha >= hoy).sort((a, b) => a.fecha.localeCompare(b.fecha));
+import { getOccupancy } from '../lib/content';
+const occupancy = await getOccupancy();
+const dateFormatter = new Intl.DateTimeFormat('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+const today = new Date().toISOString().slice(0, 10);
+const upcoming = occupancy.filter((day) => day.fecha >= today).sort((first, second) => first.fecha.localeCompare(second.fecha));
 ---
 <Base title="Disponibilidad del local" description="Calendario con los días en que el local de la asociación de vecinos está ocupado.">
   <PageHead title="Disponibilidad del local" intro="Consulta los días en que el local de la asociación está ocupado." />
   <div class="container section">
     <div class="two-col">
       <div>
-        <div class="card cal" id="cal" data-ocupacion={JSON.stringify(ocupacion)}>
+        <div class="card cal" id="cal" data-occupancy={JSON.stringify(occupancy)}>
           <div class="cal-head">
             <button class="icon-btn" type="button" id="cal-prev" aria-label="Mes anterior"><Icon name="prev" /></button>
             <h2 id="cal-title" aria-live="polite"></h2>
@@ -29,10 +29,10 @@ const proximas = ocupacion.filter((o) => o.fecha >= hoy).sort((a, b) => a.fecha.
       </div>
       <div>
         <h2>Próximos días ocupados</h2>
-        {proximas.length === 0 ? <p class="empty">No hay días ocupados registrados.</p> : (
+        {upcoming.length === 0 ? <p class="empty">No hay días ocupados registrados.</p> : (
           <ul class="file-list">
-            {proximas.map((o) => (
-              <li class="card" style="padding:16px 24px"><strong>{fmt.format(new Date(o.fecha))}</strong>{o.motivo && <><br /><span style="color:var(--color-muted-foreground)">{o.motivo}</span></>}</li>
+            {upcoming.map((day) => (
+              <li class="card" style="padding:16px 24px"><strong>{dateFormatter.format(new Date(day.fecha))}</strong>{day.motivo && <><br /><span style="color:var(--color-muted-foreground)">{day.motivo}</span></>}</li>
             ))}
           </ul>
         )}
@@ -44,7 +44,7 @@ const proximas = ocupacion.filter((o) => o.fecha >= hoy).sort((a, b) => a.fecha.
     (function () {
       var root = document.getElementById('cal');
       var busy = {};
-      JSON.parse(root.dataset.ocupacion).forEach(function (o) { busy[o.fecha] = o.motivo || 'Ocupado'; });
+      JSON.parse(root.dataset.occupancy).forEach(function (o) { busy[o.fecha] = o.motivo || 'Ocupado'; });
       var body = document.getElementById('cal-body');
       var title = document.getElementById('cal-title');
       var now = new Date(); var y = now.getFullYear(), m = now.getMonth();

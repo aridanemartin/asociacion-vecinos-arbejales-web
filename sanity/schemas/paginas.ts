@@ -1,17 +1,81 @@
-import {defineArrayMember, defineField, defineType} from 'sanity'
+import {defineArrayMember, defineField, defineType, type ValidationContext} from 'sanity'
+import {FileSizeWarning} from '../components/FileSizeWarning'
 import {fotosField} from './foto'
 
-const horario = (name: string, title: string, ejemplo: string) =>
+// Sanity uses SI units: 1 MB = 1,000,000 bytes.
+const MAX_FILE_BYTES = 10 * 1_000_000
+
+// The size is not stored in the file reference: it lives in the asset
+// document. Cache it per reference so validation does not repeat the query.
+const fileSizeCache = new Map<string, Promise<number | null>>()
+
+const getFileSize = (context: ValidationContext, ref: string) => {
+  let request = fileSizeCache.get(ref)
+  if (!request) {
+    request = context
+      .getClient({apiVersion: '2025-01-01'})
+      .fetch<number | null>('*[_id == $ref][0].size', {ref})
+    fileSizeCache.set(ref, request)
+    // Do not cache a failed request; let the next validation retry it.
+    request.catch(() => fileSizeCache.delete(ref))
+  }
+  return request
+}
+
+// Prevents publishing documents larger than 10 MB.
+const validateFileSize = async (value: unknown, context: ValidationContext) => {
+  const ref = (value as {asset?: {_ref?: string}} | undefined)?.asset?._ref
+  if (!ref) return true
+  try {
+    const size = await getFileSize(context, ref)
+    if (!size || size <= MAX_FILE_BYTES) return true
+    const sizeInMb = (size / 1_000_000).toFixed(1)
+    return `El archivo pesa ${sizeInMb} MB y el máximo es 10 MB. Compímalo antes de subirlo y vuelva a intentarlo.`
+  } catch {
+    // If the size cannot be checked, do not block publishing.
+    return true
+  }
+}
+
+const schedule = (name: string, title: string, example: string) =>
   defineField({
     name,
     title,
     type: 'text',
     rows: 4,
-    description: `Escriba los días y las horas, uno por línea. Por ejemplo: ${ejemplo}`,
+    description: `Escriba los días y las horas, uno por línea. Por ejemplo: ${example}`,
+  })
+
+// Quién atiende cada horario y cómo contactar. Todo opcional.
+const contact = (name: string, title: string) =>
+  defineField({
+    name,
+    title,
+    type: 'object',
+    options: {collapsible: true, collapsed: false},
+    fields: [
+      defineField({
+        name: 'responsable',
+        title: 'Quién lo gestiona (opcional)',
+        type: 'string',
+        description: 'Por ejemplo: «Parroquia de Arbejales» o el nombre de la empresa.',
+      }),
+      defineField({
+        name: 'telefono',
+        title: 'Teléfono (opcional)',
+        type: 'string',
+        description: 'Escriba el número tal como quiere que aparezca. Por ejemplo: 613 11 85 29.',
+      }),
+      defineField({
+        name: 'email',
+        title: 'Correo electrónico (opcional)',
+        type: 'email',
+      }),
+    ],
   })
 
 // Texto enriquecido con fotos intercaladas entre los párrafos.
-const cuerpoField = (title: string, description: string) =>
+const bodyField = (title: string, description: string) =>
   defineField({
     name: 'cuerpo',
     title,
@@ -49,7 +113,7 @@ export const historia = defineType({
   title: 'Historia de Arbejales',
   type: 'document',
   fields: [
-    cuerpoField(
+    bodyField(
       'Textos y fotos de la historia',
       'Escriba o pegue los textos que recopila Boni. Con la barra de herramientas puede poner negrita, cursiva, títulos, listas y citas. Para poner una foto entre dos párrafos, haga clic al final del párrafo, pulse el botón «+» y elija «Foto». Las fotos deben estar en formato WebP.',
     ),
@@ -60,10 +124,10 @@ export const historia = defineType({
 // 2 · Rancho de Ánimas (historia con fotos; los vídeos son documentos aparte)
 export const ranchoAnimas = defineType({
   name: 'ranchoAnimas',
-  title: 'Rancho de Ánimas Arbejales',
+  title: 'Rancho de Ánimas Arbejales - Teror',
   type: 'document',
   fields: [
-    cuerpoField(
+    bodyField(
       'Textos y fotos de la historia del Rancho de Ánimas',
       'Escriba aquí la historia del Rancho de Ánimas. Con la barra de herramientas puede poner negrita, cursiva, títulos, listas y citas. Para poner una foto entre dos párrafos, haga clic al final del párrafo, pulse el botón «+» y elija «Foto». Las fotos deben estar en formato WebP.',
     ),
@@ -124,7 +188,7 @@ export const nuestrasFiestas = defineType({
   title: 'Nuestras fiestas',
   type: 'document',
   fields: [
-    cuerpoField(
+    bodyField(
       'Descripción de las fiestas',
       'Cuente cómo son las fiestas de Arbejales. Con la barra de herramientas puede poner negrita, cursiva, títulos, listas y citas. Para poner una foto entre dos párrafos, haga clic al final del párrafo, pulse el botón «+» y elija «Foto». Las fotos deben estar en formato WebP.',
     ),
@@ -156,16 +220,22 @@ export const iglesiaCementerio = defineType({
   title: 'Iglesia y cementerio',
   type: 'document',
   fields: [
-    horario('horarioMisas', 'Horario de misas', '«Sábados a las 19:00» y en otra línea «Domingos a las 11:00».'),
-    horario('horarioCementerio', 'Horario del cementerio', '«De lunes a domingo, de 9:00 a 18:00».'),
-    horario('horarioArchivo', 'Horario del archivo parroquial', '«Martes y jueves, de 10:00 a 12:00».'),
-    fotosField('Añada aquí las fotos de la iglesia y del cementerio.', 'Fotos de la iglesia y el cementerio'),
+    schedule('horarioMisas', 'Horario de misas', '«Sábados a las 19:00» y en otra línea «Domingos a las 11:00».'),
+    contact('contactoMisas', 'Contacto para las misas'),
+    schedule('horarioCementerio', 'Horario del cementerio', '«De lunes a domingo, de 9:00 a 18:00».'),
+    contact('contactoCementerio', 'Contacto del cementerio'),
+    schedule('horarioArchivo', 'Horario del archivo parroquial', '«Martes y jueves, de 10:00 a 12:00».'),
+    contact('contactoArchivo', 'Contacto del archivo parroquial'),
+    fotosField(
+      'Añada aquí las fotos de la iglesia y del cementerio. La primera foto de la lista es la que se muestra junto a los horarios.',
+      'Fotos de la iglesia y el cementerio',
+    ),
   ],
   preview: {prepare: () => ({title: 'Iglesia y cementerio: horarios y fotos'})},
 })
 
 // 4 · Documentos (los archivos son documentos aparte)
-export const CARPETAS = [
+export const FOLDERS = [
   {title: 'Estatutos de la asociación', value: 'estatutos'},
   {title: 'Actas de la asociación', value: 'actas'},
   {title: 'Memoria de actividades anual', value: 'memorias'},
@@ -180,7 +250,7 @@ export const documento = defineType({
       name: 'carpeta',
       title: '¿En qué carpeta va este documento?',
       type: 'string',
-      options: {layout: 'radio', list: CARPETAS},
+      options: {layout: 'radio', list: FOLDERS},
       validation: (r) => r.required().error('Elija la carpeta donde debe aparecer el documento.'),
     }),
     defineField({
@@ -201,9 +271,14 @@ export const documento = defineType({
       title: 'Archivo',
       type: 'file',
       options: {accept: '.pdf,.doc,.docx,.odt,.xls,.xlsx'},
+      components: {input: FileSizeWarning},
       description:
-        'Pulse «Subir» y elija el archivo de su ordenador (mejor si es PDF), o arrástrelo hasta este recuadro.',
-      validation: (r) => r.required().error('Falta el archivo. Pulse «Subir» y elíjalo.'),
+        'Pulse «Subir» y elija el archivo de su ordenador (mejor si es PDF), o arrástrelo hasta este recuadro. El archivo no puede superar los 10 MB.',
+      validation: (r) =>
+        r
+          .required()
+          .error('Falta el archivo. Pulse «Subir» y elíjalo.')
+          .custom(validateFileSize),
     }),
   ],
   orderings: [{title: 'Más recientes primero', name: 'fechaDesc', by: [{field: 'fecha', direction: 'desc'}]}],

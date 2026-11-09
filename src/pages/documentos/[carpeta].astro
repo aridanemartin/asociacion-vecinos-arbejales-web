@@ -2,25 +2,25 @@
 import Base from '../../layouts/Base.astro';
 import PageHead from '../../components/PageHead.astro';
 import Icon from '../../components/Icon.astro';
-import { carpetas, getArchivos } from '../../lib/content';
+import { folders, getFiles } from '../../lib/content';
 export function getStaticPaths() {
-  return carpetas.map((c) => ({ params: { carpeta: c.slug }, props: { c } }));
+  return folders.map((folder) => ({ params: { carpeta: folder.slug }, props: { folder } }));
 }
-const { c } = Astro.props;
-const archivos = await getArchivos(c.slug);
+const { folder } = Astro.props;
+const files = await getFiles(folder.slug);
 ---
-<Base title={c.titulo}>
-  <PageHead title={c.titulo} intro={c.descripcion} />
+<Base title={folder.title}>
+  <PageHead title={folder.title} intro={folder.description} />
   <div class="container section">
-    {archivos.length === 0 ? (
+    {files.length === 0 ? (
       <p class="empty">Todavía no hay archivos en esta carpeta.</p>
     ) : (
       <ul class="file-list">
-        {archivos.map((a) => (
+        {files.map((file) => (
           <li>
-            <a class="card" href={a.url} download={a.nombre} target="_blank" rel="noopener noreferrer">
-              <Icon name="file" /> <span>{a.titulo}</span>
-              {a.fecha && <time datetime={a.fecha}>{a.fecha}</time>}
+            <a class="card" href={file.url} download={file.nombre} target="_blank" rel="noopener noreferrer">
+              <Icon name="file" /> <span>{file.titulo}</span>
+              {file.fecha && <time datetime={file.fecha}>{file.fecha}</time>}
             </a>
           </li>
         ))}

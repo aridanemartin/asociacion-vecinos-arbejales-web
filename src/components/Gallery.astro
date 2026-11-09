@@ -1,13 +1,13 @@
 ---
-import { imgUrl, type Foto } from '../lib/content';
+import { imageUrl, type Foto } from '../lib/content';
 // Muestra las fotos añadidas desde el panel. Si no hay ninguna, no muestra nada.
 const { fotos = [] } = Astro.props as { fotos?: Foto[] };
 ---
 {fotos.length > 0 && (
   <div class="gallery" style={fotos.length === 1 ? 'grid-template-columns:1fr' : undefined}>
-    {fotos.map((f) => (
+    {fotos.map((photo) => (
       <figure class="photo-box" style="margin:0">
-        <img src={imgUrl(f)} alt={f.alt} loading="lazy" />
+        <img src={imageUrl(photo)} alt={photo.alt} loading="lazy" />
       </figure>
     ))}
   </div>

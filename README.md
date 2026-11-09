@@ -14,7 +14,7 @@ npm run preview  # sirve dist/
 
 ## Contenido
 
-La web lee el contenido de Sanity en tiempo de compilación:
+La web lee todo el contenido de Sanity en tiempo de compilación:
 
 - Proyecto `9p125sri`, dataset `production` (público para lectura).
 - Esquemas en `sanity/schemas/` y menú del panel en `sanity/structure.ts`.
@@ -29,37 +29,12 @@ editor de texto enriquecido (Portable Text) con un único campo donde se escribe
 párrafos, títulos, listas y citas, y donde se pueden insertar fotos entre párrafos
 (con el botón «+»). Las fotos se suben siempre en WebP.
 
-### Datos iniciales
+## Despliegue
 
-El contenido de arranque (textos, fotos de ejemplo, PDF descargables, días ocupados
-y teléfonos) se cargó en la cuenta con:
+La web no tiene datos de reserva: todo el contenido se consulta a Sanity durante la
+construcción. Si el panel no responde, la compilación falla con un error que indica
+la consulta afectada; si una sección está vacía, la página muestra su aviso de
+«Pronto publicaremos…» o queda sin elementos.
 
-```sh
-npm run seed   # requiere SANITY_API_TOKEN con permiso de escritura en .env
-```
-
-El script `scripts/seed-sanity.mjs` es idempotente: reutiliza las imágenes y archivos
-ya subidos y sobrescribe los documentos con los mismos ids. La fuente de esos datos es
-`src/data/mock.ts`, que sigue sirviendo de **respaldo** si el panel se queda sin
-contenido (ver más abajo).
-
-Los teléfonos y algunos documentos del contenido inicial son ficticios: sustitúyelos
-por los reales desde el panel.
-
-### Respaldo con datos de ejemplo
-
-`src/lib/content.ts` usa los datos de `src/data/mock.ts` **solo cuando la consulta a
-Sanity no devuelve nada** (o no responde). En cuanto hay contenido real en el panel,
-la web muestra ese contenido.
-
-| Variable | Efecto |
-| --- | --- |
-| sin definir | Usa los datos de ejemplo solo si Sanity está vacío o no responde. |
-| `PUBLIC_SANITY_MOCK=true` | Fuerza los datos de ejemplo (no consulta Sanity). |
-| `PUBLIC_SANITY_MOCK=false` | Desactiva los datos de ejemplo por completo. |
-
-Para publicar con contenido real, define `PUBLIC_SANITY_MOCK=false` en el entorno de
-despliegue.
-
-Los datos de ejemplo no llevan fotos. Los PDF de ejemplo están en `public/docs/`
-(`npm run mock:docs`, solo macOS).
+Para publicar con un proyecto o dataset distintos de `9p125sri/production`, define
+`PUBLIC_SANITY_PROJECT_ID` y `PUBLIC_SANITY_DATASET` en el entorno de despliegue.

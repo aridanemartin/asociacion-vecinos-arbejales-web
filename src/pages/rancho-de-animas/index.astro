@@ -2,18 +2,18 @@
 import Base from '../../layouts/Base.astro';
 import PageHead from '../../components/PageHead.astro';
 import CuerpoRico from '../../components/CuerpoRico.astro';
-import { getRancho, getVideos } from '../../lib/content';
-const r = await getRancho();
+import { getRanchoStory, getVideos } from '../../lib/content';
+const ranchoStory = await getRanchoStory();
 const videos = await getVideos();
 ---
-<Base title="Rancho de Ánimas Arbejales" description="Historia y vídeos del Rancho de Ánimas de Arbejales, en Teror.">
-  <PageHead title="Rancho de Ánimas Arbejales" intro="Una tradición viva del barrio." />
+<Base title="Rancho de Ánimas Arbejales - Teror" description="Historia y vídeos del Rancho de Ánimas de Arbejales, en Teror.">
+  <PageHead title="Rancho de Ánimas Arbejales - Teror" intro="Una tradición viva del barrio." />
   <div class="container section">
     <section class="rancho-historia" aria-labelledby="historia-titulo">
       <h2 id="historia-titulo">Historia</h2>
       <div class="prose historia">
-        {r?.cuerpo?.length ? (
-          <CuerpoRico bloques={r.cuerpo} />
+        {ranchoStory?.cuerpo?.length ? (
+          <CuerpoRico bloques={ranchoStory.cuerpo} />
         ) : (
           <p class="empty">Pronto publicaremos aquí la historia del Rancho de Ánimas.</p>
         )}
@@ -26,14 +26,14 @@ const videos = await getVideos();
         <p class="empty">Todavía no hay vídeos publicados.</p>
       ) : (
         <div class="video-grid">
-          {videos.map((v) => (
+          {videos.map((video) => (
             <figure class="card video-card">
               <div class="video-frame">
-                <a class="video-play" href={`https://www.youtube.com/watch?v=${v.youtubeId}`} target="_blank" rel="noopener noreferrer" aria-label={`Ver en YouTube: ${v.titulo} (se abre en una pestaña nueva)`}>
-                  <img src={`https://i.ytimg.com/vi/${v.youtubeId}/hqdefault.jpg`} alt="" loading="lazy" width="480" height="360" />
+                <a class="video-play" href={`https://www.youtube.com/watch?v=${video.youtubeId}`} target="_blank" rel="noopener noreferrer" aria-label={`Ver en YouTube: ${video.titulo} (se abre en una pestaña nueva)`}>
+                  <img src={`https://i.ytimg.com/vi/${video.youtubeId}/hqdefault.jpg`} alt="" loading="lazy" width="480" height="360" />
                 </a>
               </div>
-              <figcaption>{v.titulo.replace(/^Rancho de Ánimas de Arbejales-Teror[,:]?\s*/, '') || v.titulo}</figcaption>
+              <figcaption>{video.titulo.replace(/^Rancho de Ánimas de Arbejales-Teror[,:]?\s*/, '') || video.titulo}</figcaption>
             </figure>
           ))}
         </div>

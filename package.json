@@ -7,9 +7,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check",
-    "seed": "node scripts/seed-sanity.mjs",
-    "mock:docs": "sh scripts/mock-docs.sh"
+    "check": "astro check"
   },
   "dependencies": {
     "@astrojs/react": "^7.1.1",

@@ -14,7 +14,7 @@ export type NavItem = { href: string; label: string; short: string; icon: string
 
 export const nav: NavItem[] = [
   { href: '/historia', label: 'Historia de Arbejales', short: 'Historia', icon: 'history', blurb: 'Textos, fotos y recuerdos del barrio.' },
-  { href: '/rancho-de-animas', label: 'Rancho de Ánimas', short: 'Rancho de Ánimas', icon: 'music', blurb: 'Historia y vídeos del Rancho de Ánimas de Arbejales.' },
+  { href: '/rancho-de-animas', label: 'Rancho de Ánimas Arbejales - Teror', short: 'Rancho de Ánimas', icon: 'music', blurb: 'Historia y vídeos del Rancho de Ánimas de Arbejales.' },
   { href: '/nuestras-fiestas', label: 'Nuestras fiestas', short: 'Fiestas', icon: 'party', blurb: 'Cómo celebramos las fiestas y fotos de años anteriores.' },
   { href: '/iglesia-y-cementerio', label: 'Iglesia y cementerio', short: 'Iglesia y cementerio', icon: 'church', blurb: 'Horarios de misas, cementerio y archivo parroquial.' },
   { href: '/documentos', label: 'Documentos de la asociación', short: 'Documentos', icon: 'file', blurb: 'Estatutos, actas y memorias anuales.' },
