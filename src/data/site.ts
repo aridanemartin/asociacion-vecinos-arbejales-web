@@ -4,7 +4,7 @@ export const site = {
   description:
     'Web de la Asociación de Vecinos Llano Roque, en Arbejales (Teror, Gran Canaria): noticias, historia, documentos y servicios para el vecindario.',
   facebook: 'https://www.facebook.com/p/Avv-Llano-Roque-Arbejales-100015420938821/',
-  // Buzón que recibe las sugerencias (se envía con formsubmit.co).
+  // Buzón que recibe las sugerencias (se muestra en /sugerencias).
   suggestionsEmail: 'asv.arbejales@gmail.com',
 };
 
