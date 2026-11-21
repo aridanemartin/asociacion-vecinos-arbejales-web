@@ -29,11 +29,6 @@ async function fetchSanity<T>(resource: string, query: string, params: Record<st
   }
 }
 
-export const folders: Folder[] = [
-  { slug: 'estatutos', title: 'Estatutos de la asociación', description: 'Normas que regulan el funcionamiento de la asociación.' },
-  { slug: 'actas', title: 'Actas de la asociación', description: 'Actas de las asambleas y reuniones de la directiva.' },
-  { slug: 'memorias', title: 'Memoria de actividades anual', description: 'Resumen de las actividades realizadas cada año.' },
-];
 
 const PHOTO = `{ "url": imagen.asset->url, "alt": descripcion }`;
 const PHOTOS = `fotos[defined(imagen.asset)]${PHOTO}`;
@@ -111,13 +106,41 @@ export const getChurch = () =>
     `*[_id == "iglesiaCementerio"][0]{ horarioMisas, contactoMisas, horarioCementerio, contactoCementerio, horarioArchivo, contactoArchivo, "fotos": coalesce(${PHOTOS}, []) }`,
   );
 
-export async function getFiles(folder: string): Promise<Archivo[]> {
+/** Turns a folder name into a URL segment: «Actas de 2026» → actas-de-2026. */
+const slugify = (text: string) =>
+  text
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '') || 'carpeta';
+
+export async function getFolders(): Promise<Folder[]> {
+  const rows = await fetchSanity<{ id: string; titulo: string; descripcion?: string; slug?: string }[]>(
+    'las carpetas de documentos',
+    `*[_type == "carpeta" && defined(titulo)] | order(coalesce(orden, 9999) asc, titulo asc){
+      "id": _id, titulo, descripcion, "slug": slug.current
+    }`,
+  );
+
+  // Folders without a slug get one from their name; repeated slugs get a numeric suffix.
+  const used = new Set<string>();
+  return rows.map((row) => {
+    const base = slugify(row.slug || row.titulo);
+    let slug = base;
+    for (let n = 2; used.has(slug); n++) slug = `${base}-${n}`;
+    used.add(slug);
+    return { id: row.id, slug, title: row.titulo, description: row.descripcion ?? undefined };
+  });
+}
+
+export async function getFiles(folderId: string): Promise<Archivo[]> {
   const rows = await fetchSanity<Archivo[]>(
     'los documentos de la asociación',
-    `*[_type == "documento" && carpeta == $carpeta && defined(archivo.asset)] | order(fecha desc, _createdAt desc){
+    `*[_type == "documento" && carpeta._ref == $carpetaId && defined(archivo.asset)] | order(fecha desc, _createdAt desc){
       titulo, fecha, "url": archivo.asset->url, "nombre": archivo.asset->originalFilename
     }`,
-    { carpeta: folder },
+    { carpetaId: folderId },
   );
 
   return rows.map((file) => ({ ...file, fecha: file.fecha ?? undefined }));

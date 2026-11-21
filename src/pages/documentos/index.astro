@@ -2,18 +2,20 @@
 import Base from '../../layouts/Base.astro';
 import PageHead from '../../components/PageHead.astro';
 import Icon from '../../components/Icon.astro';
-import { folders, getFiles } from '../../lib/content';
-const totals = await Promise.all(folders.map(async (folder) => (await getFiles(folder.slug)).length));
+import { getFiles, getFolders } from '../../lib/content';
+const folders = await getFolders();
+const totals = await Promise.all(folders.map(async (folder) => (await getFiles(folder.id)).length));
 ---
 <Base title="Documentos de la asociación" description="Estatutos, actas y memorias de actividades de la asociación de vecinos.">
   <PageHead title="Documentos de la asociación de vecinos" intro="Consulta y descarga la documentación de la asociación." />
   <div class="container section">
+    {folders.length === 0 && <p class="empty">Todavía no hay documentos publicados.</p>}
     <div class="grid">
       {folders.map((folder, index) => (
         <a class="card tile" href={`/documentos/${folder.slug}`}>
           <span class="ico"><Icon name="folder" /></span>
           <h3>{folder.title}</h3>
-          <p>{folder.description}</p>
+          {folder.description && <p>{folder.description}</p>}
           <span class="more">{totals[index]} {totals[index] === 1 ? 'archivo' : 'archivos'} <Icon name="arrow" size={18} /></span>
         </a>
       ))}

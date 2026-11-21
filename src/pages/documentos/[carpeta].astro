@@ -2,12 +2,13 @@
 import Base from '../../layouts/Base.astro';
 import PageHead from '../../components/PageHead.astro';
 import Icon from '../../components/Icon.astro';
-import { folders, getFiles } from '../../lib/content';
-export function getStaticPaths() {
+import { getFiles, getFolders } from '../../lib/content';
+export async function getStaticPaths() {
+  const folders = await getFolders();
   return folders.map((folder) => ({ params: { carpeta: folder.slug }, props: { folder } }));
 }
 const { folder } = Astro.props;
-const files = await getFiles(folder.slug);
+const files = await getFiles(folder.id);
 ---
 <Base title={folder.title}>
   <PageHead title={folder.title} intro={folder.description} />

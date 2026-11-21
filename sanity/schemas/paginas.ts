@@ -234,12 +234,53 @@ export const iglesiaCementerio = defineType({
   preview: {prepare: () => ({title: 'Iglesia y cementerio: horarios y fotos'})},
 })
 
-// 4 · Documentos (los archivos son documentos aparte)
-export const FOLDERS = [
-  {title: 'Estatutos de la asociación', value: 'estatutos'},
-  {title: 'Actas de la asociación', value: 'actas'},
-  {title: 'Memoria de actividades anual', value: 'memorias'},
-]
+// 4 · Documentos (carpetas y archivos son documentos aparte)
+export const carpeta = defineType({
+  name: 'carpeta',
+  title: 'Carpeta de documentos',
+  type: 'document',
+  fields: [
+    defineField({
+      name: 'titulo',
+      title: 'Nombre de la carpeta',
+      type: 'string',
+      description: 'Por ejemplo: «Actas de la asociación».',
+      validation: (r) => r.required().max(80).error('Escriba el nombre de la carpeta (máximo 80 letras).'),
+    }),
+    defineField({
+      name: 'descripcion',
+      title: 'Descripción (opcional)',
+      type: 'text',
+      rows: 2,
+      description: 'Una frase que explique qué hay en la carpeta. Se muestra debajo del nombre.',
+      validation: (r) => r.max(200).error('Máximo 200 letras.'),
+    }),
+    defineField({
+      name: 'orden',
+      title: 'Posición (opcional)',
+      type: 'number',
+      description: 'Las carpetas se ordenan de menor a mayor número (1, 2, 3…). Si lo deja vacío, va al final.',
+    }),
+    defineField({
+      name: 'slug',
+      title: 'Dirección en la web (opcional)',
+      type: 'slug',
+      options: {source: 'titulo'},
+      description: 'Si la deja vacía, se crea a partir del nombre de la carpeta. No hace falta tocarla.',
+    }),
+  ],
+  orderings: [
+    {
+      title: 'Posición',
+      name: 'ordenAsc',
+      by: [
+        {field: 'orden', direction: 'asc'},
+        {field: 'titulo', direction: 'asc'},
+      ],
+    },
+  ],
+  preview: {select: {title: 'titulo', subtitle: 'descripcion'}},
+})
 
 export const documento = defineType({
   name: 'documento',
@@ -249,8 +290,10 @@ export const documento = defineType({
     defineField({
       name: 'carpeta',
       title: '¿En qué carpeta va este documento?',
-      type: 'string',
-      options: {layout: 'radio', list: FOLDERS},
+      type: 'reference',
+      to: [{type: 'carpeta'}],
+      options: {disableNew: true},
+      description: 'Si quiere cambiarlo de carpeta, elija aquí otra.',
       validation: (r) => r.required().error('Elija la carpeta donde debe aparecer el documento.'),
     }),
     defineField({

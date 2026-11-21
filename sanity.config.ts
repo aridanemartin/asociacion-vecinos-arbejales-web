@@ -19,8 +19,11 @@ export default defineConfig({
         id: 'documento-en-carpeta',
         title: 'Documento',
         schemaType: 'documento',
-        parameters: [{name: 'carpeta', type: 'string'}],
-        value: (p: {carpeta: string}) => ({carpeta: p.carpeta}),
+        parameters: [{name: 'carpetaId', type: 'string'}],
+        // Weak until publish, so files can be added to a folder that is not published yet.
+        value: (p: {carpetaId: string}) => ({
+          carpeta: {_type: 'reference', _ref: p.carpetaId, _weak: true, _strengthenOnPublish: {type: 'carpeta'}},
+        }),
       },
     ],
   },

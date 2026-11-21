@@ -1,5 +1,4 @@
 import type {StructureBuilder, StructureResolver} from 'sanity/structure'
-import {FOLDERS} from './schemas/paginas'
 
 const single = (S: StructureBuilder, type: string, title: string) =>
   S.listItem().title(title).id(type).child(S.document().schemaType(type).documentId(type).title(title))
@@ -36,26 +35,37 @@ export const structure: StructureResolver = (S) =>
             ]),
         ),
       single(S, 'iglesiaCementerio', '4 · Iglesia y cementerio (horarios y fotos)'),
+      // Las carpetas se crean, renombran y borran aquí; cada una abre sus datos y sus archivos.
       S.listItem()
         .title('5 · Documentos de la asociación de vecinos')
         .child(
-          S.list()
-            .title('Documentos')
-            .items([
-              ...FOLDERS.map((folder) =>
-                S.listItem()
-                  .title(`Carpeta: ${folder.title}`)
-                  .id(folder.value)
-                  .child(
-                    S.documentList()
-                      .title(folder.title)
-                      .schemaType('documento')
-                      .filter('_type == "documento" && carpeta == $carpeta')
-                      .params({carpeta: folder.value})
-                      .initialValueTemplates([S.initialValueTemplateItem('documento-en-carpeta', {carpeta: folder.value})]),
-                  ),
-              ),
-            ]),
+          S.documentTypeList('carpeta')
+            .title('Carpetas (pulse + para crear una nueva)')
+            .defaultOrdering([
+              {field: 'orden', direction: 'asc'},
+              {field: 'titulo', direction: 'asc'},
+            ])
+            .child((carpetaId) =>
+              S.list()
+                .title('Carpeta')
+                .items([
+                  S.listItem()
+                    .title('Archivos de esta carpeta')
+                    .id('archivos')
+                    .child(
+                      S.documentList()
+                        .title('Archivos (pulse + para añadir uno)')
+                        .schemaType('documento')
+                        .filter('_type == "documento" && carpeta._ref == $carpetaId')
+                        .params({carpetaId})
+                        .initialValueTemplates([S.initialValueTemplateItem('documento-en-carpeta', {carpetaId})]),
+                    ),
+                  S.listItem()
+                    .title('Nombre y descripción de la carpeta (o borrarla)')
+                    .id('datos')
+                    .child(S.document().schemaType('carpeta').documentId(carpetaId)),
+                ]),
+            ),
         ),
       typeList(S, 'ocupacionLocal', '6 · Disponibilidad del local (días ocupados)'),
       typeList(S, 'telefono', '8 · Contactos (teléfonos y webs)'),

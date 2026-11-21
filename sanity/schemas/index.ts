@@ -1,6 +1,7 @@
 import {foto} from './foto'
 import {novedad} from './novedad'
 import {
+  carpeta,
   documento,
   fiestaAnio,
   historia,
@@ -21,6 +22,7 @@ export const schemaTypes = [
   nuestrasFiestas,
   fiestaAnio,
   iglesiaCementerio,
+  carpeta,
   documento,
   ocupacionLocal,
   telefono,

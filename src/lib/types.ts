@@ -15,7 +15,7 @@ export type Novedad = {
 
 export type Archivo = { titulo: string; url: string; fecha?: string; nombre: string };
 
-export type Folder = { slug: string; title: string; description: string };
+export type Folder = { id: string; slug: string; title: string; description?: string };
 
 export type Historia = { cuerpo: Bloque[] };
 
