@@ -67,6 +67,15 @@ export const structure: StructureResolver = (S) =>
                 ]),
             ),
         ),
-      typeList(S, 'ocupacionLocal', '6 · Disponibilidad del local (días ocupados)'),
+      S.listItem()
+        .title('6 · Disponibilidad del local')
+        .child(
+          S.list()
+            .title('Disponibilidad del local')
+            .items([
+              typeList(S, 'ocupacionLocal', 'Días ocupados del local'),
+              single(S, 'reservasLocal', 'Contacto para reservar el local (teléfono o correo)'),
+            ]),
+        ),
       typeList(S, 'telefono', '8 · Contactos (teléfonos y webs)'),
     ])

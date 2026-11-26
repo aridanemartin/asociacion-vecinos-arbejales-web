@@ -11,11 +11,12 @@ import type {
   Iglesia,
   Novedad,
   Rancho,
+  Reservas,
   Telefono,
   Video,
 } from './types';
 
-export type { Archivo, Bloque, BloqueFoto, BloqueTexto, DiaOcupado, FiestaAnio, Fiestas, Folder, Foto, Historia, Iglesia, Novedad, Rancho, Telefono, Video } from './types';
+export type { Archivo, Bloque, BloqueFoto, BloqueTexto, DiaOcupado, FiestaAnio, Fiestas, Folder, Foto, Historia, Iglesia, Novedad, Rancho, Reservas, Telefono, Video } from './types';
 
 // All content is read from the Sanity Studio at build time.
 const client = createClient({ projectId, dataset, apiVersion: '2025-01-01', useCdn: false });
@@ -166,6 +167,14 @@ export async function getOccupancy(): Promise<DiaOcupado[]> {
   }
   return days;
 }
+
+export const getBookingContact = async () =>
+  (
+    await fetchSanity<Reservas | null>(
+      'el contacto para reservar el local',
+      `*[_id == "reservasLocal"][0]{ contactoReservas }`,
+    )
+  )?.contactoReservas ?? undefined;
 
 export const getContacts = () =>
   fetchSanity<Telefono[]>(

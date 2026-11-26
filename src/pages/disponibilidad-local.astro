@@ -2,8 +2,8 @@
 import Base from '../layouts/Base.astro';
 import PageHead from '../components/PageHead.astro';
 import Icon from '../components/Icon.astro';
-import { getOccupancy } from '../lib/content';
-const occupancy = await getOccupancy();
+import { getBookingContact, getOccupancy } from '../lib/content';
+const [occupancy, booking] = await Promise.all([getOccupancy(), getBookingContact()]);
 const dateFormatter = new Intl.DateTimeFormat('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 const today = new Date().toISOString().slice(0, 10);
 const upcoming = occupancy.filter((day) => day.fecha >= today).sort((first, second) => first.fecha.localeCompare(second.fecha));
@@ -36,7 +36,24 @@ const upcoming = occupancy.filter((day) => day.fecha >= today).sort((first, seco
             ))}
           </ul>
         )}
-        <p style="margin-top:24px">¿Quieres reservar el local? <a href="/sugerencias">Escríbenos</a>.</p>
+        {(booking?.telefono || booking?.email) && (
+          <div class="reservas">
+            <p>¿Quieres reservar el local? {booking.telefono ? 'Llama al' : 'Escribe a'}:</p>
+            {booking.responsable && <span class="responsable">{booking.responsable}</span>}
+            {booking.telefono && (
+              <a href={`tel:${booking.telefono.replace(/\s/g, '')}`}>
+                <Icon name="phone" size={18} />
+                <span class="sr-only">Llamar para reservar: </span>{booking.telefono}
+              </a>
+            )}
+            {booking.email && (
+              <a href={`mailto:${booking.email}?subject=${encodeURIComponent('Reserva del local')}`}>
+                <Icon name="mail" size={18} />
+                <span><span class="sr-only">Escribir para reservar: </span>{booking.email}</span>
+              </a>
+            )}
+          </div>
+        )}
       </div>
     </div>
   </div>
@@ -77,3 +94,12 @@ const upcoming = occupancy.filter((day) => day.fecha >= today).sort((first, seco
     })();
   </script>
 </Base>
+
+<style>
+  .reservas { display: flex; flex-direction: column; gap: var(--space-1); margin-top: var(--space-6); }
+  .reservas p { margin: 0; }
+  .reservas .responsable { font-size: 0.9rem; }
+  .reservas a { display: inline-flex; align-items: center; gap: var(--space-2); min-height: 44px; font-weight: 600; color: var(--color-primary); text-decoration: none; }
+  .reservas a > span { min-width: 0; overflow-wrap: anywhere; }
+  .reservas a:hover { text-decoration: underline; }
+</style>

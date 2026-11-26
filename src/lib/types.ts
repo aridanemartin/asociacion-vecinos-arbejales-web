@@ -47,6 +47,8 @@ export type Video = { titulo: string; youtubeId: string };
 /** Quién atiende un horario y cómo contactar. */
 export type ContactoHorario = { responsable?: string; telefono?: string; email?: string };
 
+export type Reservas = { contactoReservas?: ContactoHorario };
+
 export type Iglesia = {
   horarioMisas?: string;
   contactoMisas?: ContactoHorario;

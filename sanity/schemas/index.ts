@@ -9,6 +9,7 @@ import {
   nuestrasFiestas,
   ocupacionLocal,
   ranchoAnimas,
+  reservasLocal,
   telefono,
   video,
 } from './paginas'
@@ -25,8 +26,9 @@ export const schemaTypes = [
   carpeta,
   documento,
   ocupacionLocal,
+  reservasLocal,
   telefono,
 ]
 
 // Documentos que solo existen una vez (no se pueden crear ni borrar).
-export const SINGLETONS = ['historia', 'ranchoAnimas', 'nuestrasFiestas', 'iglesiaCementerio']
+export const SINGLETONS = ['historia', 'ranchoAnimas', 'nuestrasFiestas', 'iglesiaCementerio', 'reservasLocal']

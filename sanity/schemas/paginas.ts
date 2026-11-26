@@ -368,6 +368,15 @@ export const ocupacionLocal = defineType({
   },
 })
 
+// Contacto que aparece en «Disponibilidad del local» para pedir el local.
+export const reservasLocal = defineType({
+  name: 'reservasLocal',
+  title: 'Contacto para reservar el local',
+  type: 'document',
+  fields: [contact('contactoReservas', 'Contacto para reservar el local')],
+  preview: {prepare: () => ({title: 'Contacto para reservar el local'})},
+})
+
 // 7 · Contactos de interés (teléfonos y webs)
 export const telefono = defineType({
   name: 'telefono',
